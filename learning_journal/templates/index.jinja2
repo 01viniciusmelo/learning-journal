@@ -1,0 +1,31 @@
+{% extends "layout.jinja2" %}
+{% block title %}Benny's Learning Journal - Entries{% endblock%}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="full column" style="margin-top: 25%">
+      <h4>Benny's Learning Journal</h4>
+      <p>My personal learning journal.</p>
+      <table class="u-full-width">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Post Date</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in entries %}
+            <tr>
+              <td><a href="{{ request.route_url('detail', id=item.id) }}">{{ item.title }}</a></td>
+              <td>{{ item.creation_date }}</td>
+              <td>{% for tag in item.tags %}{{ tag }}, {% endfor %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

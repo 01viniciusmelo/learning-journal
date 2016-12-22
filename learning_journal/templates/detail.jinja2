@@ -1,0 +1,12 @@
+{% extends "layout.jinja2" %}
+{% block title %}Benny's Learning Journal - Entry {{ entry.id }}{% endblock%}
+
+{% block body %}
+
+<p>{{ entry.title }}</p>
+<p>Posted: {{ entry.creation_date }}</p>
+<p>{{ entry.body }}</p>
+<p>Last Modified: {{ entry.last_modified }}</p>
+
+
+{% endblock %}

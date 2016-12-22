@@ -1,3 +1,6 @@
+"""Initialize database."""
+
+
 import os
 import sys
 import transaction
@@ -5,7 +8,7 @@ import transaction
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
+)
 
 from pyramid.scripts.common import parse_vars
 
@@ -14,11 +17,12 @@ from ..models import (
     get_engine,
     get_session_factory,
     get_tm_session,
-    )
-from ..models import MyModel
+)
+from ..models import Entry
 
 
 def usage(argv):
+    """Usage."""
     cmd = os.path.basename(argv[0])
     print('usage: %s <config_uri> [var=value]\n'
           '(example: "%s development.ini")' % (cmd, cmd))
@@ -26,14 +30,15 @@ def usage(argv):
 
 
 def main(argv=sys.argv):
+    """Main function."""
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
+    settings = get_appsettings(config_uri, options=options)  # Access database
 
-    engine = get_engine(settings)
+    engine = get_engine(settings)  # Start interaction
     Base.metadata.create_all(engine)
 
     session_factory = get_session_factory(engine)
@@ -41,5 +46,10 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        model = MyModel(name='one', value=1)
+        model = Entry(id='1',
+                      title='First Entry',
+                      body='This is the body.',
+                      creation_date="",
+                      last_modified="",
+                      )
         dbsession.add(model)

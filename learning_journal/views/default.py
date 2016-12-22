@@ -1,19 +1,43 @@
+"""Default."""
+
+
 from pyramid.response import Response
 from pyramid.view import view_config
 
 from sqlalchemy.exc import DBAPIError
 
-from ..models import MyModel
+from ..models import Entry
 
 
-@view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
+@view_config(route_name='index', renderer='../templates/index.jinja2')
 def my_view(request):
+    """My view."""
     try:
-        query = request.dbsession.query(MyModel)
-        one = query.filter(MyModel.name == 'one').first()
+        query = request.dbsession.query(Entry)
+        one = query.filter(Entry.id == '1').first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'one': one, 'project': 'learning-journal'}
+
+
+@view_config(route_name="detail",
+             renderer="../templates/detail.jinja2")
+def detail_view(request):
+    """Create view."""
+    if request.method == "POST":
+        # get the form stuff
+        return {}
+    return {}
+
+
+@view_config(route_name="create",
+             renderer="../templates/create.jinja2")
+def create_view(request):
+    """Create view."""
+    if request.method == "POST":
+        # get the form stuff
+        return {}
+    return {}
 
 
 db_err_msg = """\
