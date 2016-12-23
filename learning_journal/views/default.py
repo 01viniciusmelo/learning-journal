@@ -16,7 +16,7 @@ from ..models import Jentry
 def list_view(request):
     """My view."""
     try:
-        query = request.dbsession.query(Jentry)
+        query = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'journal': query.all(), 'project': 'learning-journal'}
@@ -59,7 +59,6 @@ def update_view(request):
         jentry.title = request.POST['title']
         jentry.content = request.POST['content']
         jentry.modified = datetime.datetime.now()
-        request.dbsession.add(jentry)
         return HTTPFound(request.route_url('list'))
     return {"jentry": jentry}
 

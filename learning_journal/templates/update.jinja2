@@ -8,17 +8,19 @@
       <h4>Edit "{{ jentry.title }}"</h4>
       <p>Created {{ jentry.created }}
       <p>Last modified {{ jentry.modified }}
-      <form>
+      {# BEGIN FORM #}
+      <form method="POST">
         <div class="row">
           <div class="six columns">
             <label for="title-input">Title</label>
-            <input class="u-full-width" type="text" value="{{ jentry.title }}" id="title-input">
+            <input class="u-full-width" type="text" value="{{ jentry.title }}" name="title">
           </div>
         </div>
         <label for="content-input">Content</label>
-        <textarea class="u-full-width" id="content-input">{{ jentry.content }}</textarea>
+        <textarea class="u-full-width" name="content">{{ jentry.content }}</textarea>
         <input class="button-primary" type="submit" value="Save">
       </form>
+      {# END FORM #}
     </div>
   </div>
 </div>
