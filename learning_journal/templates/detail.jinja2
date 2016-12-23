@@ -1,12 +1,16 @@
 {% extends "layout.jinja2" %}
-{% block title %}Benny's Learning Journal - Entry {{ entry.id }}{% endblock%}
+{% block title %}Benny's Learning Journal - Entry {{ jentry.id }}{% endblock %}
 
 {% block body %}
-
-<p>{{ entry.title }}</p>
-<p>Posted: {{ entry.creation_date }}</p>
-<p>{{ entry.body }}</p>
-<p>Last Modified: {{ entry.last_modified }}</p>
-
-
+<div class="container">
+  <div class="row">
+    <div class="full column" style="margin-top: 25%">
+      <h4>{{ jentry.title }}</h4>
+      <p>Posted: {{ jentry.created }}</p>
+      <p>{{ jentry.content }}</p>
+      <p>Last Modified: {{ jentry.modified }}</p>
+      <a class="button " href="{{ request.route_url('update', id=jentry.id) }}">Edit</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

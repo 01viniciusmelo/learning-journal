@@ -4,6 +4,7 @@
 import os
 import sys
 import transaction
+import datetime
 
 from pyramid.paster import (
     get_appsettings,
@@ -18,7 +19,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
 )
-from ..models import Entry
+from ..models import Jentry
 
 
 def usage(argv):
@@ -39,17 +40,19 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri, options=options)  # Access database
 
     engine = get_engine(settings)  # Start interaction
+
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
     session_factory = get_session_factory(engine)
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-
-        model = Entry(id='1',
-                      title='First Entry',
-                      body='This is the body.',
-                      creation_date="",
-                      last_modified="",
-                      )
-        dbsession.add(model)
+        now = datetime.datetime.now()
+        jentry_model = Jentry(id='1',
+                              title='First Entry',
+                              content='This is the entries content.',
+                              created=now,
+                              modified=now,
+                              )
+        dbsession.add(jentry_model)

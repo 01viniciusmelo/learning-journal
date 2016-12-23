@@ -16,11 +16,11 @@
           </tr>
         </thead>
         <tbody>
-          {% for item in entries %}
+          {% for jentry in journal %}
             <tr>
-              <td><a href="{{ request.route_url('detail', id=item.id) }}">{{ item.title }}</a></td>
-              <td>{{ item.creation_date }}</td>
-              <td>{% for tag in item.tags %}{{ tag }}, {% endfor %}</td>
+              <td><a href="{{ request.route_url('detail', id=jentry.id) }}">{{ jentry.title }}</a></td>
+              <td>{{ jentry.created }}</td>
+              <td>{% for tag in jentry.tags %}{{ tag }}, {% endfor %}</td>
             </tr>
           {% endfor %}
         </tbody>

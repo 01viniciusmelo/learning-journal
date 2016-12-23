@@ -1,0 +1,25 @@
+{% extends "layout.jinja2" %}
+{% block title %}Benny's Learning Journal - New Entry{% endblock%}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="full column" style="margin-top: 25%">
+      <h4>Edit "{{ jentry.title }}"</h4>
+      <p>Created {{ jentry.created }}
+      <p>Last modified {{ jentry.modified }}
+      <form>
+        <div class="row">
+          <div class="six columns">
+            <label for="title-input">Title</label>
+            <input class="u-full-width" type="text" value="{{ jentry.title }}" id="title-input">
+          </div>
+        </div>
+        <label for="content-input">Content</label>
+        <textarea class="u-full-width" id="content-input">{{ jentry.content }}</textarea>
+        <input class="button-primary" type="submit" value="Save">
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

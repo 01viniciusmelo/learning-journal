@@ -7,25 +7,20 @@
     <div class="full column" style="margin-top: 25%">
       <h4>Benny's Learning Journal</h4>
       <p>New entry</p>
-      <form>
+      {# BEGIN FORM #}
+      <form method="POST">
         <div class="row">
           <div class="six columns">
-            <label for="title-input">Title</label>
-            <input class="u-full-width" type="text" placeholder="Title" id="title-input">
-          </div>
-          <div class="six columns">
-            <label for="date-input">Date</label>
-            <input class="u-full-width" type="date" id="date-input">
+            <label for="title">Title</label>
+            <input class="u-full-width" type="text" placeholder="Title" name="title">
           </div>
         </div>
-        <label for="content-input">Content</label>
-        <textarea class="u-full-width" placeholder="Today, I learned..." id="content-input"></textarea>
-        <label class="example-send-yourself-copy">
-          <input type="checkbox">
-          <span class="label-body">Save as a draft</span>
+        <label for="content">Content</label>
+        <textarea class="u-full-width" placeholder="Today, I learned..." name="content"></textarea>
         </label>
         <input class="button-primary" type="submit" value="Submit">
       </form>
+      {# END FORM #}
     </div>
   </div>
 </div>
