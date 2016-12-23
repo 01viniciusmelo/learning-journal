@@ -5,6 +5,6 @@ The contents of this repo are a personal learning journal created using the Pyra
 ```
 $ pip install -e .
 $ initialize_db development.ini
-$ pserve development.ini
+$ pserve development.ini --reload
 ```
 
