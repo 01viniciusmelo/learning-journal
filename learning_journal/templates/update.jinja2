@@ -13,11 +13,11 @@
         <div class="row">
           <div class="six columns">
             <label for="title-input">Title</label>
-            <input class="u-full-width" type="text" value="{{ jentry.title }}" name="title">
+            <input class="u-full-width" type="text" value="{{ jentry.title }}" name="title" required>
           </div>
         </div>
         <label for="content-input">Content</label>
-        <textarea class="u-full-width" name="content">{{ jentry.content }}</textarea>
+        <textarea class="u-full-width" name="content" required>{{ jentry.content }}</textarea>
         <input class="button-primary" type="submit" value="Save">
       </form>
       {# END FORM #}

@@ -1,3 +1,6 @@
+"""Setup."""
+
+
 import os
 
 from setuptools import setup, find_packages
@@ -20,6 +23,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'markdown',
+    'bleach',
 ]
 
 tests_require = [

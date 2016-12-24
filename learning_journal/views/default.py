@@ -1,6 +1,8 @@
 """Default."""
 
 import datetime
+import markdown
+from jinja2 import Markup
 
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -28,6 +30,11 @@ def detail_view(request):
     """Create view."""
     jentry_id = int(request.matchdict["id"])
     jentry = request.dbsession.query(Jentry).get(jentry_id)
+    jentry.contentr = Markup(markdown.markdown(jentry.content, [
+        'markdown.extensions.nl2br',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.smarty',
+        'fenced_code', ]))
     return {"jentry": jentry}
 
 

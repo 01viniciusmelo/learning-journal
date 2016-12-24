@@ -17,5 +17,6 @@ class Jentry(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Unicode)
     content = Column(Unicode)
+    contentr = Column(Unicode)
     created = Column(Unicode)
     modified = Column(Unicode)
