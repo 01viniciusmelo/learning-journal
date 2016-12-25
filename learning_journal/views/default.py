@@ -16,7 +16,7 @@ from ..models import Jentry
 @view_config(route_name='list',
              renderer='../templates/list.jinja2')
 def list_view(request):
-    """My view."""
+    """Home view lists all journal entries."""
     try:
         query = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
     except DBAPIError:
@@ -27,7 +27,7 @@ def list_view(request):
 @view_config(route_name="detail",
              renderer="../templates/detail.jinja2")
 def detail_view(request):
-    """Create view."""
+    """Create view is a form to make a new post."""
     jentry_id = int(request.matchdict["id"])
     jentry = request.dbsession.query(Jentry).get(jentry_id)
     jentry.contentr = Markup(markdown.markdown(jentry.content, [
@@ -66,7 +66,7 @@ def update_view(request):
         jentry.title = request.POST['title']
         jentry.content = request.POST['content']
         jentry.modified = datetime.datetime.now()
-        return HTTPFound(request.route_url('list'))
+        return HTTPFound(request.route_url('detail', id=jentry_id))
     return {"jentry": jentry}
 
 
