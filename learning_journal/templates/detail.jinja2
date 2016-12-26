@@ -6,8 +6,10 @@
   <div class="row">
     <div class="full column" style="margin-top: 25%; margin-bottom: 25%">
       <h4>{{ jentry.title }}</h4>
-      <p>Created {{ jentry.created.strftime('%A, %B %d, %Y [%-H:%M %p]') }}</p>
-      <p>Last modified {{ jentry.modified }}</p>
+      <p>Created {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+      {% if jentry.created != jentry.modified %}
+        <br>Last modified {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+      {% endif %}</p>
       <p>{{ jentry.contentr }}</p>
       <a class="button " href="{{ request.route_url('update', id=jentry.id) }}">Edit</a>
     </div>
