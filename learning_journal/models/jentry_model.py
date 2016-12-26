@@ -5,6 +5,7 @@ from sqlalchemy import (
     Column,
     Integer,
     Unicode,
+    DateTime,
 )
 
 from .meta import Base
@@ -18,5 +19,5 @@ class Jentry(Base):
     title = Column(Unicode)
     content = Column(Unicode)
     contentr = Column(Unicode)
-    created = Column(Unicode)
-    modified = Column(Unicode)
+    created = Column(DateTime)
+    modified = Column(DateTime)
