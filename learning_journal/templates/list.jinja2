@@ -1,31 +1,24 @@
 {% extends "layout.jinja2" %}
-{% block title %}Benny's Learning Journal - Entries{% endblock%}
+{% block title %}Home{% endblock%}
 
 {% block body %}
-<div class="container">
-  <div class="row">
-    <div class="full column" style="margin-top: 25%; margin-bottom: 25%">
-      <h4>Benny's Learning Journal</h4>
-      <p>My personal learning journal.</p>
-      <table class="u-full-width">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Post Date</th>
-            <th>Tags</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for jentry in journal %}
-            <tr>
-              <td><a href="{{ request.route_url('detail', id=jentry.id) }}">{{ jentry.title }}</a></td>
-              <td>{{ jentry.created.strftime('%a %x') }}</td>
-              <td>{% for tag in jentry.tags %}{{ tag }}, {% endfor %}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<p>My personal learning journal.</p>
+<table class="u-full-width">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Date/Time</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for jentry in journal %}
+    <tr>
+      <td><a href="{{ request.route_url('detail', id=jentry.id) }}">{{ jentry.title }}</a></td>
+      <td>{{ jentry.created.strftime('%A %b %d, %Y') }}</td>
+      <td>{{ jentry.category }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

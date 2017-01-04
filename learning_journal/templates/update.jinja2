@@ -1,29 +1,30 @@
 {% extends "layout.jinja2" %}
-{% block title %}Benny's Learning Journal - New Entry{% endblock%}
+{% block title %}Edit Entry{% endblock%}
 
 {% block body %}
-<div class="container">
+<h1>Editing "{{ jentry.title }}"</h1>
+<p>Created {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+  {% if jentry.created != jentry.modified %}
+  <br>Last modified {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+  {% endif %}
+</p>
+
+{# BEGIN FORM #}
+<form method="POST">
   <div class="row">
-    <div class="full column" style="margin-top: 25%; margin-bottom: 25%">
-      <h4>Edit "{{ jentry.title }}"</h4>
-      <p>Created {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
-      {% if jentry.created != jentry.modified %}
-        <br>Last modified {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
-      {% endif %}</p>
-      {# BEGIN FORM #}
-      <form method="POST">
-        <div class="row">
-          <div class="six columns">
-            <label for="title-input">Title</label>
-            <input class="u-full-width" type="text" value="{{ jentry.title }}" name="title" required>
-          </div>
-        </div>
-        <label for="content-input">Content</label>
-        <textarea class="u-full-width" name="content" required>{{ jentry.content }}</textarea>
-        <input class="button-primary" type="submit" value="Save">
-      </form>
-      {# END FORM #}
+    <div class="six columns">
+      <label for="title-input">Title</label>
+      <input class="u-full-width" type="text" value="{{ jentry.title }}" name="title" required>
+    </div>
+    <div class="six columns">
+      <label for="category">Category</label>
+      <input class="u-full-width" type="text" value="{{ jentry.category }}" placeholder="Category" name="category" required>
     </div>
   </div>
-</div>
+  <label for="content-input">Content</label>
+  <textarea rows="5" class="u-full-width" name="content">{{ jentry.content }}</textarea>
+  <input class="button-primary" type="submit" value="Save">
+</form>
+{# END FORM #}
+
 {% endblock %}

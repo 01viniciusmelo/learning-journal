@@ -1,8 +1,8 @@
 # Pyramid Learning Journal Project
 
-This repo contains the source code for my personal learning journal—created in Python using Pyramid's "alchemy" starter scaffold, and deployed on Heroku with a `postgresql` database.
+This repo contains the source code for my personal learning journal—created in Python using Pyramid's "alchemy" starter scaffold, and deployed on Heroku.
 
-To get started with your own version of my learning journal:
+To get started with your own version of this learning journal:
 ```bash
 # 1. Clone this repo
 # 2. Initialize/activate your virtual environment
@@ -42,6 +42,4 @@ Found within `routes.py` and `views/default.py`. The pages are rendered via the 
 - Route `delete` runs the `delete_view(request)` function, which sends you to a warning page in order to confirm the deletion of an entry. This warning page is rendered with the `delete.jinja2` template.
 - Route `delete_forever` runs the `delete_forever_view(request)` function. This function permanently removes an existing journal entry from the database and sends you back to the homepage.
 
-
-## Tests
 

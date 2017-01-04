@@ -55,5 +55,6 @@ def main(argv=sys.argv):
                               contentr='<h2>This is the entries content.</h2>',
                               created=now,
                               modified=now,
+                              category=None
                               )
         dbsession.add(jentry_model)

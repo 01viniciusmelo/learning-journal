@@ -21,3 +21,4 @@ class Jentry(Base):
     contentr = Column(Unicode)
     created = Column(DateTime)
     modified = Column(DateTime)
+    category = Column(Unicode)

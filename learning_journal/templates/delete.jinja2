@@ -1,0 +1,15 @@
+{% extends "layout.jinja2" %}
+{% block title %}Delete {{ jentry.id }}{% endblock %}
+
+{% block body %}
+<h1>Delete "{{ jentry.title }}"?</h1>
+<p>This action cannot be undone.</p>
+<p>
+  <a class="button" href="{{ request.route_url('delete_forever', id=jentry.id) }}">
+    DELETE FOREVER
+  </a>
+  <a class="button" href="{{ request.route_url('detail', id=jentry.id) }}">
+    CANCEL
+  </a>
+</p>
+{% endblock %}
