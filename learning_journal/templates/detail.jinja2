@@ -1,0 +1,16 @@
+{% extends "layout.jinja2" %}
+{% block title %}{{ jentry.title }}{% endblock %}
+
+{% block body %}
+<h1>{{ jentry.title }}</h1>
+<p>Created — {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+  {% if jentry.created != jentry.modified %}
+  <br>Last modified — {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+  <br>Category — {{ jentry.category }}
+  {% endif %}
+</p>
+<p>{{ jentry.contentr }}</p>
+
+<a class="button " href="{{ request.route_url('update', id=jentry.id) }}">Edit</a>
+<a class="button " href="{{ request.route_url('delete', id=jentry.id) }}">Delete</a>
+{% endblock %}

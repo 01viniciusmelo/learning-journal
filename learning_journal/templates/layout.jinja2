@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>
+      {% block title %}{% endblock %} - Benny's Learning Journal
+  </title>
+  <meta name="description" content="Ben Petty's personal learning journal.">
+  <meta name="author" content="Benjamin S. Petty">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.ico">
+  <link rel="shortcut icon" href="${ request.static_url('learning_journal:static/images/favicon.ico') }">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <nav>
+      <a class="button" href="{{ request.route_url('list') }}">Home</a>
+      <a class="button " href="{{ request.route_url('create') }}">New Entry</a>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="full column" style="margin-top: 25%; margin-bottom: 25%">
+        <h4>Benny's Learning Journal</h4>
+
+  {% block body %}{% endblock %}
+
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    {% block footer %}
+    &copy; Copyright 2016 <a href="http://benpetty.me" target="_blank">Benjamin S. Petty</a>.
+    {% endblock %}
+  </div>
+
+<!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/scripts/js/maintainscroll.jquery.min.js"></script>
+</body>
+</html>

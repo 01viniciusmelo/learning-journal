@@ -1,0 +1,26 @@
+{% extends "layout.jinja2" %}
+{% block title %}New Entry{% endblock%}
+
+{% block body %}
+<p>New entry</p>
+
+{# BEGIN FORM #}
+<form method="POST">
+  <div class="row">
+    <div class="six columns">
+      <label for="title">Title</label>
+      <input class="u-full-width" type="text" placeholder="Title" name="title" required>
+    </div>
+    <div class="six columns">
+      <label for="category">Category</label>
+      <input class="u-full-width" type="text" placeholder="Category" name="category" required>
+    </div>
+  </div>
+  <label for="content">Content</label>
+  <textarea rows="5" class="u-full-width" placeholder="Today, I learned..." name="content"></textarea>
+  </label>
+  <input class="button-primary" type="submit" value="Submit">
+</form>
+{# END FORM #}
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.jinja2" %}
+{% block title %}Home{% endblock%}
+
+{% block body %}
+<p>My personal learning journal.</p>
+<table class="u-full-width">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Date/Time</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for jentry in journal %}
+    <tr>
+      <td><a href="{{ request.route_url('detail', id=jentry.id) }}">{{ jentry.title }}</a></td>
+      <td>{{ jentry.created.strftime('%A %b %d, %Y') }}</td>
+      <td>{{ jentry.category }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
