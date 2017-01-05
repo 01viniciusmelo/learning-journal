@@ -23,7 +23,7 @@ def list_view(request):
         query = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'journal': query.all(), 'project': 'learning-journal'}
+    return {'journal': query.all(), 'project': 'learning_journal'}
 
 
 @view_config(route_name="detail",
@@ -95,7 +95,7 @@ db_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem
 might be caused by one of the following things:
 
-1.  You may need to run the "initialize_learning-journal_db" script
+1.  You may need to run the "initialize_db" script
     to initialize your database tables.  Check your virtual
     environment's "bin" directory for this script and try to run it.
 
