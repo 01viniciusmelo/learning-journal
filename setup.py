@@ -24,6 +24,7 @@ requires = [
     'waitress',
     'markdown',
     'bleach',
+    'psycopg2',
 ]
 
 tests_require = [
