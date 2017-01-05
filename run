@@ -2,3 +2,4 @@
 set -e
 python setup.py develop
 python runapp.py
+initialize_db production.ini
