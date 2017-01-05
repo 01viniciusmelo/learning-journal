@@ -49,12 +49,13 @@ def create_view(request):
         category = request.POST['category']
         content = request.POST['content']
         now = datetime.datetime.now()
-        jentry = Jentry(title=title,
-                        category=category,
-                        created=now,
-                        modified=now,
-                        content=content
-                        )
+        jentry = Jentry(
+            title=title,
+            category=category,
+            created=now,
+            modified=now,
+            content=content
+        )
         request.dbsession.add(jentry)
         return HTTPFound(request.route_url('list'))
     return {}
