@@ -34,9 +34,9 @@ tests_require = [
     'tox',
 ]
 
-setup(name='learning-journal',
+setup(name='learning_journal',
       version='0.0',
-      description='learning-journal',
+      description='learning_journal',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
           "Programming Language :: Python",
