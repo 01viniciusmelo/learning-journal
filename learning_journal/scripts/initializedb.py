@@ -49,12 +49,12 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
         now = datetime.datetime.now()
-        jentry_model = Jentry(id='1',
-                              title='First Entry',
-                              content='## This is the entries content.',
-                              contentr='<h2>This is the entries content.</h2>',
-                              created=now,
-                              modified=now,
-                              category='Empty Category'
-                              )
+        jentry_model = Jentry(
+            title='First Entry',
+            content='## This is the entries content.',
+            contentr='<h2>This is the entries content.</h2>',
+            created=now,
+            modified=now,
+            category='Empty Category'
+        )
         dbsession.add(jentry_model)
