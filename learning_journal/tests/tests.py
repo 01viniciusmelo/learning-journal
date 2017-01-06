@@ -113,3 +113,12 @@ def test_list_view_returns_objects_when_exist(dummy_request, add_models):
     from learning_journal.views.default import list_view
     result = list_view(dummy_request)
     assert len(result["journal"]) == 100
+
+
+def test_detail_view_returns_dict_with_one_object(dummy_request, add_models):
+    """Detail view should return a dict."""
+    from learning_journal.views.default import detail_view
+    dummy_request.matchdict["id"] = "4"
+    result = detail_view(dummy_request)
+    jentry = dummy_request.dbsession.query(Jentry).get(4)
+    assert result["jentry"] == jentry
