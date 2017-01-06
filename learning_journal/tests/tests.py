@@ -165,3 +165,23 @@ def test_update_view_returns_returns_jentry(dummy_request, add_models):
     result = update_view(dummy_request)
     jentry = dummy_request.dbsession.query(Jentry).get(4)
     assert result["jentry"].title == jentry.title
+
+
+def test_update_view_submit_updates_exisiting_obj(dummy_request, add_models):
+    """Submitting in the edit view should update the object."""
+    from learning_journal.views.default import update_view
+
+    query = dummy_request.dbsession.query(Jentry)
+
+    dummy_request.method = "POST"
+    dummy_request.matchdict["id"] = "4"
+    dummy_request.POST["title"] = "test title"
+    dummy_request.POST["content"] = "## Test content."
+    dummy_request.POST["contentr"] = "<h2>Test content.</h2>"
+    dummy_request.POST["created"] = now
+    dummy_request.POST["lastmodified"] = now
+    dummy_request.POST["category"] = 'Empty Category'
+    update_view(dummy_request)
+
+    jentry = query.get(4)
+    assert jentry.title == "test title"
