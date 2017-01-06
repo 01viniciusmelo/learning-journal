@@ -232,3 +232,10 @@ def test_list_route_has_table(testapp):
     response = testapp.get('/', status=200)
     html = response.html
     assert len(html.find_all("table")) == 1
+
+
+def test_list_route_has_empty_table(testapp):
+    """The table should only have a header row."""
+    response = testapp.get('/', status=200)
+    html = response.html
+    assert len(html.find_all("tr")) == 1
