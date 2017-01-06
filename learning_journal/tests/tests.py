@@ -95,7 +95,14 @@ def add_models(dummy_request):
 # ============ UNIT TESTS ===============
 
 def test_new_jentry(db_session):
-    """New jentry is added to the database."""
+    """New journals are added to the database."""
     db_session.add_all(JENTRYS)
     query = db_session.query(Jentry).all()
     assert len(query) == len(JENTRYS)
+
+
+def test_list_view_returns_empty_when_empty(dummy_request):
+    """Test that the list view returns nothing."""
+    from learning_journal.views.default import list_view
+    result = list_view(dummy_request)
+    assert len(result["journal"]) == 0
