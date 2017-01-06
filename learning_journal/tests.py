@@ -14,7 +14,7 @@ import os
 import transaction
 
 
-# =============== TEST JENTRYS ================
+# ================================ TEST JENTRYS ============================= #
 
 FAKE = faker.Faker()
 now = datetime.datetime.now()
@@ -43,7 +43,7 @@ JENTRYS = [
 ]
 
 
-# ================== UNIT TESTS SESSION =====================
+# =========================== UNIT TESTS SESSION ============================ #
 
 
 @pytest.fixture(scope="session")
@@ -87,7 +87,7 @@ def add_models(dummy_request):
     dummy_request.dbsession.add_all(JENTRYS)
 
 
-# ============ UNIT TESTS ===============
+# ============================== UNIT TESTS ================================= #
 
 def test_new_jentry(db_session):
     """New journals are added to the database."""
@@ -182,7 +182,7 @@ def test_update_view_submit_updates_exisiting_obj(dummy_request, add_models):
     assert jentry.title == "test title"
 
 
-# =========== FUNCTIONAL TESTS SESSION ==============
+# =========================== FUNCTIONAL TESTS SESSION ====================== #
 
 @pytest.fixture(scope="session")
 def testapp(request):
@@ -225,7 +225,10 @@ def fill_db(testapp):
         return dbsession
 
 
-# ============== FUNCTIONAL TESTS ================
+# ============================ FUNCTIONAL TESTS ============================= #
+
+
+# ---------------------------------------------------------- EMPTY DB TESTS - #
 
 def test_list_route_has_table(testapp):
     """The index contains an html table."""
@@ -239,3 +242,24 @@ def test_list_route_has_empty_table(testapp):
     response = testapp.get('/', status=200)
     html = response.html
     assert len(html.find_all("tr")) == 1
+
+
+def test_empty_detail_route_returns_error(testapp):
+    """Route to a nonexistent detail page should return a 404."""
+    response = testapp.get("/journal/4", status=404)
+    assert response.status_code == 404
+
+
+# --------------------------------------------------------- FILLED DB TESTS - #
+
+def test_list_route_has_filled_table(testapp, fill_db):
+    """If journal is populated, the home page contains equal number of rows."""
+    response = testapp.get('/', status=200)
+    html = response.html
+    assert len(html.find_all("tr")) == 101
+
+
+def test_detail_route_returns_info(testapp):
+    """Detail route should have content."""
+    response = testapp.get("/journal/4")
+    assert "Category — Empty Category" in response.text
