@@ -106,3 +106,10 @@ def test_list_view_returns_empty_when_empty(dummy_request):
     from learning_journal.views.default import list_view
     result = list_view(dummy_request)
     assert len(result["journal"]) == 0
+
+
+def test_list_view_returns_objects_when_exist(dummy_request, add_models):
+    """Test that list view returns objects when they exist in the DB."""
+    from learning_journal.views.default import list_view
+    result = list_view(dummy_request)
+    assert len(result["journal"]) == 100
