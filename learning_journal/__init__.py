@@ -1,4 +1,4 @@
-"""__init.py__ initializes the Learning Journal."""
+"""Initializes the Learning Journal."""
 
 import os
 

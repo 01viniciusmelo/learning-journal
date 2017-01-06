@@ -45,7 +45,6 @@ JENTRYS = [
 
 # =========================== UNIT TESTS SESSION ============================ #
 
-
 @pytest.fixture(scope="session")
 def configuration(request):
     """Configurator."""
