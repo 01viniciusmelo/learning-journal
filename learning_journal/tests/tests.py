@@ -130,3 +130,9 @@ def test_detail_view_for_jentry_not_found(dummy_request):
     dummy_request.matchdict["id"] = "2103944"
     result = detail_view(dummy_request)
     assert result.status_code == 404
+
+
+def test_create_view_returns_empty_dict(dummy_request):
+    """Get create view should return an empty dict."""
+    from learning_journal.views.default import create_view
+    assert create_view(dummy_request) == {}
