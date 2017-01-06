@@ -136,3 +136,23 @@ def test_create_view_returns_empty_dict(dummy_request):
     """Get create view should return an empty dict."""
     from learning_journal.views.default import create_view
     assert create_view(dummy_request) == {}
+
+
+def test_create_view_submission_adds_new_jentry(dummy_request):
+    """Submitting the new entry form creates a new jentry in the db."""
+    from learning_journal.views.default import create_view
+
+    query = dummy_request.dbsession.query(Jentry)
+    count = query.count()
+
+    dummy_request.method = "POST"
+    dummy_request.POST["title"] = "test title"
+    dummy_request.POST["content"] = "## Test content."
+    dummy_request.POST["contentr"] = "<h2>Test content.</h2>"
+    dummy_request.POST["created"] = now
+    dummy_request.POST["lastmodified"] = now
+    dummy_request.POST["category"] = 'Empty Category'
+    create_view(dummy_request)
+
+    new_count = query.count()
+    assert new_count == count + 1
