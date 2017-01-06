@@ -10,6 +10,8 @@ from learning_journal.models.meta import Base
 import faker
 import datetime
 import random
+import os
+
 
 # =============== TEST JENTRYS ================
 
@@ -38,6 +40,7 @@ JENTRYS = [
         category=random.choice(CATEGORIES)
     ) for i in range(100)
 ]
+
 
 # ================== TEST SESSION =====================
 
@@ -82,15 +85,6 @@ def add_models(dummy_request):
     """Generate model instances in the db."""
     dummy_request.dbsession.add_all(JENTRYS)
 
-
-# @pytest.fixture
-# def set_auth_credentials():
-#     """Username/password for testing."""
-#     import os
-#     from passlibs.apps import custom_app_context as pwd_context
-
-#     os.environ["AUTH_USERNAME"] = "testme"
-#     os.environ["AUTH_PASSWORD"] = pwd.context.hash("foobar")
 
 # ============ UNIT TESTS ===============
 
@@ -185,3 +179,35 @@ def test_update_view_submit_updates_exisiting_obj(dummy_request, add_models):
 
     jentry = query.get(4)
     assert jentry.title == "test title"
+
+
+# =========== FUNCTIONAL TESTS ==============
+
+@pytest.fixture(scope="session")
+def testapp(request):
+    """Test routes."""
+    from webtest import TestApp
+    from pyramid.config import Configurator
+
+    def main(global_config, **settings):
+        """Return a pyramid WSGI application."""
+        settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
+        config = Configurator(settings=settings)
+        config.include('pyramid_jinja2')
+        config.include('.models')
+        config.include('.routes')
+        config.scan()
+        return config.make_wsgi_app()
+
+    app = main({}, **{})
+    testapp = TestApp(app)
+
+    SessionFactory = app.registry["dbsession_factory"]  # noqa
+    engine = SessionFactory().bind
+    Base.metadata.create_all(bind=engine)
+
+    def tear_down():
+        Base.metadata.drop_all(bind=engine)
+
+    request.addfinalize(tear_down)
+    return testapp
