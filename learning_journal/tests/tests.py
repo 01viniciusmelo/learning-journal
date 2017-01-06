@@ -122,3 +122,11 @@ def test_detail_view_returns_dict_with_one_object(dummy_request, add_models):
     result = detail_view(dummy_request)
     jentry = dummy_request.dbsession.query(Jentry).get(4)
     assert result["jentry"] == jentry
+
+
+def test_detail_view_for_jentry_not_found(dummy_request):
+    """Nonexistent jentrys return 404 error."""
+    from learning_journal.views.default import detail_view
+    dummy_request.matchdict["id"] = "2103944"
+    result = detail_view(dummy_request)
+    assert result.status_code == 404
