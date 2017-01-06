@@ -153,8 +153,8 @@ def test_create_view_submission_adds_new_jentry(dummy_request):
     assert new_count == count + 1
 
 
-def test_update_view_returns_returns_jentry(dummy_request, add_models):
-    """Update view should return the jentry data."""
+def test_update_view_returns_jentry(dummy_request, add_models):
+    """Update view should return matching jentry data."""
     from learning_journal.views.default import update_view
     dummy_request.matchdict["id"] = "4"
     result = update_view(dummy_request)
@@ -180,6 +180,15 @@ def test_update_view_submit_updates_exisiting_obj(dummy_request, add_models):
 
     jentry = query.get(4)
     assert jentry.title == "test title"
+
+
+def test_delete_view_contains_jentry(dummy_request, add_models):
+    """Test that delete view contains jentry."""
+    from learning_journal.views.default import delete_view
+    dummy_request.matchdict["id"] = "4"
+    result = delete_view(dummy_request)
+    jentry = dummy_request.dbsession.query(Jentry).get(4)
+    assert result["jentry"].title == jentry.title
 
 
 # =========================== FUNCTIONAL TESTS SESSION ====================== #
