@@ -11,6 +11,7 @@ import faker
 import datetime
 import random
 import os
+import transaction
 
 
 # =============== TEST JENTRYS ================
@@ -42,7 +43,7 @@ JENTRYS = [
 ]
 
 
-# ================== TEST SESSION =====================
+# ================== UNIT TESTS SESSION =====================
 
 
 @pytest.fixture(scope="session")
@@ -181,7 +182,7 @@ def test_update_view_submit_updates_exisiting_obj(dummy_request, add_models):
     assert jentry.title == "test title"
 
 
-# =========== FUNCTIONAL TESTS ==============
+# =========== FUNCTIONAL TESTS SESSION ==============
 
 @pytest.fixture(scope="session")
 def testapp(request):
@@ -209,5 +210,25 @@ def testapp(request):
     def tear_down():
         Base.metadata.drop_all(bind=engine)
 
-    request.addfinalize(tear_down)
+    request.addfinalizer(tear_down)
     return testapp
+
+
+@pytest.fixture
+def fill_db(testapp):
+    """Fill database with Jentrys."""
+    SessionFactory = testapp.app.registry["dbsession_factory"]  # noqa
+    with transaction.manager:
+        dbsession = get_tm_session(SessionFactory, transaction.manager)
+        dbsession.add_all(JENTRYS)
+
+        return dbsession
+
+
+# ============== FUNCTIONAL TESTS ================
+
+def test_list_route_has_table(testapp):
+    """The index contains an html table."""
+    response = testapp.get('/', status=200)
+    html = response.html
+    assert len(html.find_all("table")) == 1
