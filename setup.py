@@ -25,6 +25,7 @@ requires = [
     'markdown',
     'bleach',
     'psycopg2',
+    'faker',
 ]
 
 tests_require = [
