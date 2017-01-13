@@ -19,7 +19,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
 )
-from ..models import Jentry
+from ..models import Jentry, User
 
 
 def usage(argv):
@@ -49,12 +49,23 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
         now = datetime.datetime.now()
-        jentry_model = Jentry(
+        jentry_init = Jentry(
             title='First Entry',
             content='## This is the entries content.',
             contentr='<h2>This is the entries content.</h2>',
             created=now,
             modified=now,
-            category='Empty Category'
+            category='Empty Category',
         )
-        dbsession.add(jentry_model)
+        dbsession.add(jentry_init)
+
+    # with transaction.manager:
+    #     dbsession = get_tm_session(session_factory, transaction.manager)
+    #     user_init = User(
+    #         username='username',
+    #         password='password',
+    #         firstname='bob',
+    #         lastname='dobalina',
+    #         email='bob@dobalina.com',
+    #     )
+    #     dbsession.add(user_init)
