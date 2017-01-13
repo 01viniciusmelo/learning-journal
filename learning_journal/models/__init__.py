@@ -9,7 +9,9 @@ import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .jentry_model import Jentry  # noqa
+from .lj_models import Jentry  # noqa
+from .lj_models import User  # noqa
+
 
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
