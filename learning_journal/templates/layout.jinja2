@@ -37,7 +37,12 @@
 
   <nav>
       <a class="button" href="{{ request.route_url('list') }}">Home</a>
+      {% if request.authenticated_userid %}
       <a class="button " href="{{ request.route_url('create') }}">New Entry</a>
+      <a class="button" href="{{ request.route_url('logout') }}">Logout</a>
+      {% else %}
+      <a class="button" href="{{ request.route_url('login') }}">Login</a>
+      {% endif %}
   </nav>
 
   <div class="container">
