@@ -1,0 +1,9 @@
+{% extends "layout.jinja2" %}
+
+{% block body %}
+<ul>
+<li>Username: {{ user.username }}</li>
+<li>Actual Name: {{ user.firstname }} {{ user.lastname }}</li>
+<li>Email: <a href="mailto:{{ user.email }}">{{ user.email }}</a></li>
+</ul>
+{% endblock %}

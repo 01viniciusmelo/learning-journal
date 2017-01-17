@@ -1,0 +1,30 @@
+{% extends "layout.jinja2" %}
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<h1>Register</h1>
+
+<form method='POST'>
+    <p>
+        <label>Username: </label>
+        <input type="text" name="username" required/>
+    </p>
+    <p>
+    <label>Password (8-12 Character): </label>
+        <input type="password" name="password" required/>
+    </p>
+    <p>
+        <label>First Name: </label>
+        <input type="text" name="firstname" required/>
+    </p>
+    <p>
+        <label>Last Name: </label>
+        <input type="text" name="lastname" required/>
+    </p>
+    <p>
+        <label>Email</label>
+        <input type="email" name="email" required/>
+    </p>
+    <input type="submit" value="Create an Account">
+</form>
+{% endblock %}
