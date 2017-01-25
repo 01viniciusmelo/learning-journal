@@ -11,6 +11,7 @@ Jinja2==2.8
 Mako==1.0.6
 Markdown==2.6.7
 MarkupSafe==0.23
+passlib==1.7.0
 PasteDeploy==1.5.2
 pexpect==4.2.1
 pickleshare==0.7.4
