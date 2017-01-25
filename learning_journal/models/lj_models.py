@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     Unicode,
     DateTime,
+    Boolean,
 )
 
 from .meta import Base
@@ -18,11 +19,35 @@ class Jentry(Base):
     __tablename__ = 'journal'
     id = Column(Integer, primary_key=True)
     title = Column(Unicode)
+    author_username = Column(Unicode)
     content = Column(Unicode)
     contentr = Column(Unicode)
     created = Column(DateTime)
     modified = Column(DateTime)
     category = Column(Unicode)
+
+    def __init__(self, **kwargs):
+        """Jentry constructor."""
+        self.title = kwargs['title']
+        self.author_username = kwargs['author_username']
+        self.content = kwargs['content']
+        self.contentr = kwargs['contentr']
+        self.created = kwargs['created']
+        self.modified = kwargs['modified']
+        self.category = kwargs['category']
+
+    def to_json(self):
+        """Convert journal entry to JSON."""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author_username": self.author_username,
+            "content": self.content,
+            "contentr": self.contentr,
+            "created": self.created,
+            "modified": self.modified,
+            "category": self.category,
+        }
 
 
 class User(Base):
@@ -30,16 +55,29 @@ class User(Base):
 
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    username = Column(Unicode)
+    username = Column(Unicode, unique=True)
     password = Column(Unicode)
     firstname = Column(Unicode)
     lastname = Column(Unicode)
-    email = Column(Unicode)
+    email = Column(Unicode, unique=True)
+    author = Column(Boolean)
+    admin = Column(Boolean)
 
     def __init__(self, **kwargs):
         """Init User constructor."""
-        self.username = kwargs["username"],
-        self.password = pwd_context.hash(kwargs["password"]),
-        self.firstname = kwargs["firstname"],
-        self.lastname = kwargs["lastname"],
-        self.email = kwargs["email"],
+        self.username = kwargs["username"]
+        self.password = pwd_context.hash(kwargs["password"])
+        self.firstname = kwargs["firstname"]
+        self.lastname = kwargs["lastname"]
+        self.email = kwargs["email"]
+        self.author = kwargs['author']
+        self.admin = kwargs['admin']
+
+    def to_json(self):
+        """Convert to JSON."""
+        return {
+            "username": self.username,
+            "firstname": self.firstname,
+            "lastname": self.lastname,
+            "email": self.email,
+        }
