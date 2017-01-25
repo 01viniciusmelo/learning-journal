@@ -3,8 +3,7 @@
 import os
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
-from pyramid.security import Everyone, Authenticated
-from pyramid.security import Allow
+from pyramid.security import Allow, Everyone, Authenticated
 
 from passlib.apps import custom_app_context as pwd_context
 
@@ -21,6 +20,7 @@ class MyRoot(object):
     __acl__ = [
         (Allow, Everyone, 'view'),
         (Allow, Authenticated, 'author'),
+        (Allow, Authenticated, 'admin'),
     ]
 
 
