@@ -29,6 +29,13 @@
   <link rel="icon" type="image/png" href="/images/favicon.ico">
   <link rel="shortcut icon" href="${ request.static_url('learning_journal:static/images/favicon.ico') }">
 
+<!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -36,13 +43,22 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
   <nav>
-      <a class="button" href="{{ request.route_url('list') }}">Home</a>
-      {% if request.authenticated_userid %}
-      <a class="button " href="{{ request.route_url('create') }}">New Entry</a>
-      <a class="button" href="{{ request.route_url('logout') }}">Logout</a>
-      {% else %}
-      <a class="button" href="{{ request.route_url('login') }}">Login</a>
-      {% endif %}
+    <a class="button" href="{{ request.route_url('list') }}">Home</a>
+    {% if request.authenticated_userid %}
+    <a class="button " href="{{ request.route_url('create') }}">New Entry</a>
+    <a class="button" href="{{ request.route_url('logout') }}">Logout</a>
+    {% else %}
+    <a class="button" href="{{ request.route_url('login') }}">Login</a>
+    {% endif %}
+    {% if user.admin %}
+    <a class="button" href="{{ request.route_url('users') }}">Admin: Users</a>
+    {% endif %}
+    {% if request.authenticated_userid %}
+    <br />Logged in as 
+      <a href="{{ request.route_url('profile', username=request.authenticated_userid) }}">
+        {{ request.authenticated_userid }}
+      </a>
+    {% endif %}
   </nav>
 
   <div class="container">
@@ -62,11 +78,5 @@
     {% endblock %}
   </div>
 
-<!-- Scripts
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script
-  src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-  crossorigin="anonymous"></script>
 </body>
 </html>

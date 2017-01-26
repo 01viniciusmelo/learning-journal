@@ -35,10 +35,11 @@ JENTRYS = [
     Jentry(
         title=FAKE.job(),
         content=FAKE.text(max_nb_chars=200),
-        contentr='',
+        author_username=str.lower(FAKE.first_name()),
         created=now,
         modified=now,
-        category=random.choice(CATEGORIES)
+        category=random.choice(CATEGORIES),
+        bio=FAKE.paragraphs(nb=1),
     ) for i in range(100)
 ]
 

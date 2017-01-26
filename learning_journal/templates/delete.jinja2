@@ -2,7 +2,7 @@
 {% block title %}Delete {{ jentry.id }}{% endblock %}
 
 {% block body %}
-<h1>Delete "{{ jentry.title }}"?</h1>
+<h1>Delete "<a href="/journal/{{ jentry.id }}">{{ jentry.title }}</a>"?</h1>
 <p>This action cannot be undone.</p>
 <p>
   <a class="button" href="{{ request.route_url('delete_forever', id=jentry.id) }}">

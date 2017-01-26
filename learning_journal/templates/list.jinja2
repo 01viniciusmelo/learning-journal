@@ -14,7 +14,8 @@
   <tbody>
     {% for jentry in journal %}
     <tr>
-      <td><a href="{{ request.route_url('detail', id=jentry.id) }}">{{ jentry.title }}</a></td>
+      <td><a href="{{ request.route_url('detail', id=jentry.id) }}">
+        {{ jentry.title }}</a></td>
       <td>{{ jentry.created.strftime('%A %b %d, %Y') }}</td>
       <td>{{ jentry.category }}</td>
     </tr>

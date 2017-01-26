@@ -10,7 +10,6 @@ from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
-
 from pyramid.scripts.common import parse_vars
 
 from learning_journal.models.meta import Base
@@ -65,10 +64,11 @@ def main(argv=sys.argv):
         benny = User(
             username="benny",
             password="password",
-            firsname="Benjamin",
+            firstname="Benjamin",
             lastname="Petty",
             email="benjamin.s.petty@gmail.com",
             author=True,
             admin=True,
+            bio="Bio."
         )
         dbsession.add(benny)

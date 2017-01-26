@@ -7,7 +7,8 @@ To get started with your own version of this learning journal:
 # 1. Clone this repo.
 # 2. Initialize/activate your virtual environment.
 # 3. Install all the required packages, including testing:
-$ pip install -e . .[testing]
+$ pip install -e . 
+$ pip install -e .[testing]
 # 4. Erase any existing entries and initialize a new database for your local environment:
 $ initialize_db development.ini
 # 5. Serve the page locally.
