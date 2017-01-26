@@ -66,10 +66,12 @@ def db_session(configuration, request):
     SessionFactory = configuration.registry['dbsession_factory']  # noqa
     session = SessionFactory()
     engine = session.bind
+    # import pdb; pdb.set_trace()
     Base.metadata.create_all(engine)
 
     def teardown():
         session.transaction.rollback()
+        Jentry.__table__.drop(engine)
 
     request.addfinalizer(teardown)
     return session
