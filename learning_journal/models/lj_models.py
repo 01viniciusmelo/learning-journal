@@ -10,7 +10,6 @@ from sqlalchemy import (
 )
 
 from .meta import Base
-from passlib.apps import custom_app_context as pwd_context
 
 
 class Jentry(Base):
@@ -26,14 +25,18 @@ class Jentry(Base):
     modified = Column(DateTime)
     category = Column(Unicode)
 
-    def __init__(self, **kwargs):
-        """Jentry constructor."""
-        self.title = kwargs['title']
-        self.author_username = kwargs['author_username']
-        self.content = kwargs['content']
-        self.created = kwargs['created']
-        self.modified = kwargs['modified']
-        self.category = kwargs['category']
+    def to_json(self):
+        """Convert to JSON."""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author_username": self.author_username,
+            "content": self.content,
+            "contentr": self.contentr,
+            "created": self.created,
+            "modified": self.modified,
+            "category": self.category,
+        }
 
 
 class User(Base):
@@ -50,13 +53,12 @@ class User(Base):
     admin = Column(Boolean)
     bio = Column(Unicode)
 
-    def __init__(self, **kwargs):
-        """Init User constructor."""
-        self.username = kwargs["username"]
-        self.password = pwd_context.hash(kwargs["password"])
-        self.firstname = kwargs["firstname"]
-        self.lastname = kwargs["lastname"]
-        self.email = kwargs["email"]
-        self.author = kwargs['author']
-        self.admin = kwargs['admin']
-        self.bio = kwargs['bio']
+    def to_json(self):
+        """Convert to JSON."""
+        return {
+            "id": self.id,
+            "username": self.username,
+            "firstname": self.firstname,
+            "lastname": self.lastname,
+            "bio": self.bio,
+        }

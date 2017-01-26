@@ -183,7 +183,7 @@ def register_view(request):
             new_name = str.lower(new_name)
         new_user = User(
             username=new_name,
-            password=request.POST["password"],
+            password=pwd_context.hash(request.POST["password"]),
             firstname=request.POST["firstname"],
             lastname=request.POST["lastname"],
             email=request.POST["email"],
@@ -395,7 +395,7 @@ def admin_register_view(request):
             new_name = str.lower(new_name)
         new_user = User(
             username=new_name,
-            password=request.POST["password"],
+            password=pwd_context.hash(request.POST["password"]),
             firstname=request.POST["firstname"],
             lastname=request.POST["lastname"],
             email=request.POST["email"],

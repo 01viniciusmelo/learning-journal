@@ -16,6 +16,7 @@ import transaction
 
 # ================================ TEST JENTRYS ============================= #
 
+
 FAKE = faker.Faker()
 now = datetime.datetime.now()
 CATEGORIES = [
@@ -39,7 +40,6 @@ JENTRYS = [
         created=now,
         modified=now,
         category=random.choice(CATEGORIES),
-        bio=FAKE.paragraphs(nb=1),
     ) for i in range(100)
 ]
 
