@@ -36,6 +36,7 @@ JENTRYS = [
     Jentry(
         title=FAKE.job(),
         content=FAKE.text(max_nb_chars=200),
+        contentr='',
         author_username=str.lower(FAKE.first_name()),
         created=now,
         modified=now,
@@ -49,7 +50,8 @@ JENTRYS = [
 @pytest.fixture(scope="session")
 def configuration(request):
     """Configurator."""
-    config = testing.setUp(settings={'sqlalchemy.url': 'sqlite:///:memory:'})
+    settings = {'sqlalchemy.url': 'postgres:///test_learning_journal'}
+    config = testing.setUp(settings=settings)
     config.include('learning_journal.models')
     config.include('learning_journal.routes')
 
@@ -71,7 +73,7 @@ def db_session(configuration, request):
 
     def teardown():
         session.transaction.rollback()
-        Jentry.__table__.drop(engine)
+        Jentry.metadata.drop_all(engine)
 
     request.addfinalizer(teardown)
     return session
