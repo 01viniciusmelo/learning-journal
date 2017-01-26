@@ -56,10 +56,10 @@ def detail_view(request):
     """Detail view expands an individual entry."""
     jentry_id = int(request.matchdict["id"])
     jentry = request.dbsession.query(Jentry).get(jentry_id)
-    author = request.dbsession.query(
-        User).filter_by(username=jentry.author_username).first()
     if not jentry:
         return Response("Not Found", content_type='text/plain', status=404)
+    author = request.dbsession.query(
+        User).filter_by(username=jentry.author_username).first()
     jentry.contentr = Markup(markdown.markdown(jentry.content, [
         'markdown.extensions.nl2br',
         'markdown.extensions.codehilite',
