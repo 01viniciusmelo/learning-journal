@@ -4,7 +4,7 @@
 import pytest
 from pyramid import testing
 
-from learning_journal.models import Jentry, get_tm_session
+from learning_journal.models import Jentry, User, get_tm_session
 from learning_journal.models.meta import Base
 
 import faker
@@ -14,7 +14,7 @@ import os
 import transaction
 
 
-# ================================ TEST JENTRYS ============================= #
+# ================================ TEST MODELS ============================= #
 
 
 FAKE = faker.Faker()
@@ -44,8 +44,42 @@ JENTRYS = [
     ) for i in range(100)
 ]
 
+USERS = [
+    User(
+        username='admin',
+        password='password',
+        firstname='bob',
+        lastname='dobalina',
+        email='admin@imager.com',
+        author=True,
+        admin=True,
+        bio='I am an admin.',
+    ),
+    User(
+        username='author',
+        password='password',
+        firstname='bob',
+        lastname='dobalina',
+        email='author@imager.com',
+        author=True,
+        admin=False,
+        bio='I am an author.',
+    ),
+    User(
+        username='user',
+        password='password',
+        firstname='bob',
+        lastname='dobalina',
+        email='user@imager.com',
+        author=False,
+        admin=False,
+        bio='I am but a meer user.',
+    ),
+]
+
 
 # =========================== UNIT TESTS SESSION ============================ #
+
 
 @pytest.fixture(scope="session")
 def configuration(request):
@@ -89,12 +123,14 @@ def dummy_request(db_session):
 def add_models(dummy_request):
     """Generate model instances in the db."""
     dummy_request.dbsession.add_all(JENTRYS)
+    dummy_request.dbsession.add_all(USERS)
 
 
 # ============================== UNIT TESTS ================================= #
 
+
 def test_new_jentry(db_session):
-    """New journals are added to the database."""
+    """New journal entries are added to the database."""
     db_session.add_all(JENTRYS)
     query = db_session.query(Jentry).all()
     assert len(query) == len(JENTRYS)
@@ -131,26 +167,34 @@ def test_detail_view_for_jentry_not_found(dummy_request):
     assert result.status_code == 404
 
 
-def test_create_view_returns_empty_dict(dummy_request):
-    """Get create view should return an empty dict."""
-    from learning_journal.views.default import create_view
-    assert create_view(dummy_request) == {}
+def test_login_view_good_credentials(dummy_request, set_auth_credentials):
+    """Test that when given good credentials login can be successful."""
+    from .views.default import login_view
+    from pyramid.httpexceptions import HTTPFound
+    dummy_request.POST["username"] = "admin"
+    dummy_request.POST["password"] = "password"
+    result = login_view(dummy_request)
+    assert isinstance(result, HTTPFound)
 
 
 def test_create_view_submission_adds_new_jentry(dummy_request):
     """Submitting the new entry form creates a new jentry in the db."""
-    from learning_journal.views.default import create_view
+    from learning_journal.views.default import create_view, login_view
 
     query = dummy_request.dbsession.query(Jentry)
     count = query.count()
 
     dummy_request.method = "POST"
+    dummy_request.POST["username"] = "author"
+    dummy_request.POST["password"] = "password"
     dummy_request.POST["title"] = "test title"
     dummy_request.POST["content"] = "## Test content."
     dummy_request.POST["contentr"] = "<h2>Test content.</h2>"
     dummy_request.POST["created"] = now
     dummy_request.POST["lastmodified"] = now
     dummy_request.POST["category"] = 'Empty Category'
+
+    login_view(dummy_request)
     create_view(dummy_request)
 
     new_count = query.count()
@@ -196,6 +240,7 @@ def test_delete_view_contains_jentry(dummy_request, add_models):
 
 
 # =========================== FUNCTIONAL TESTS SESSION ====================== #
+
 
 @pytest.fixture(scope="session")
 def testapp(request):

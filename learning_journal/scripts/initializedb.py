@@ -20,6 +20,7 @@ from learning_journal.models import (
     Jentry,
     User,
 )
+from passlib.apps import custom_app_context as pwd_context
 
 
 def usage(argv):
@@ -63,7 +64,7 @@ def main(argv=sys.argv):
         dbsession = get_tm_session(session_factory, transaction.manager)
         benny = User(
             username="benny",
-            password="password",
+            password=pwd_context.hash("password"),
             firstname="Benjamin",
             lastname="Petty",
             email="benjamin.s.petty@gmail.com",
