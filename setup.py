@@ -29,8 +29,8 @@ requires = [
 ]
 
 tests_require = [
-    'WebTest >= 1.3.1',  # py3 compat
-    'pytest',  # includes virtualenv
+    'WebTest >= 1.3.1',
+    'pytest',
     'pytest-cov',
     'tox',
     'faker',
@@ -46,9 +46,9 @@ setup(name='learning_journal',
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
       ],
-      author='',
-      author_email='',
-      url='',
+      author='Benjamin Petty',
+      author_email='contact@benpetty.me',
+      url='benpetty.me',
       keywords='web wsgi bfg pylons pyramid',
       packages=find_packages(),
       include_package_data=True,

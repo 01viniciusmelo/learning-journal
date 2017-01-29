@@ -30,10 +30,9 @@ def check_credentials(request):
         username = request.POST["username"]
         password = request.POST["password"]
         query = request.dbsession.query(User)
-        the_user = query.filter(User.username == username).first()
-        if the_user:
-            if pwd_context.verify(password, the_user.password):
-                return True
+        user_logging_in = query.filter(User.username == username).first()
+        if user_logging_in:
+            return pwd_context.verify(password, user_logging_in.password)
     return False
 
 

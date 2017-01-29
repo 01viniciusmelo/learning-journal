@@ -131,26 +131,30 @@ def profile_view(request):
 def login_view(request):
     """Login view."""
     if request.method == "POST" and request.POST:
-        if request.POST["username"] and len(
-                request.POST["username"].split()) > 1:
-            new_name = request.POST["username"].split()
-            new_name = '_'.join(new_name)
-            request.POST["username"] = new_name
         if check_credentials(request):
-            auth_head = remember(request, request.POST["username"])
-            return HTTPFound(request.route_url("list"), headers=auth_head)
-    if request.authenticated_userid:
-        return HTTPFound(
-            request.route_url(
-                'profile', username=request.authenticated_userid
+            auth_head = remember(
+                request,
+                request.POST["username"]
             )
+            return HTTPFound(
+                request.route_url('list'),
+                headers=auth_head,
+            )
+    # --- user ---
+    if request.authenticated_userid:
+        user = request.dbsession.query(User).filter_by(
+            username=request.authenticated_userid).first()
+        return HTTPFound(
+            request.route_url('list'),
+            headers=auth_head,
         )
     else:
         user = None
+    # ------------
     return {"user": user}
 
 
-# ---
+# ...
 
 
 @view_config(
@@ -163,7 +167,7 @@ def logout_view(request):
     return HTTPFound(request.route_url('list'), headers=empty_head)
 
 
-# ---
+# ...
 
 
 @view_config(

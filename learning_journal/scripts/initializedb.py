@@ -50,8 +50,8 @@ def main(argv=sys.argv):
         dbsession = get_tm_session(session_factory, transaction.manager)
         now = datetime.datetime.now()
         jentry_init = Jentry(
-            title='First Entry',
-            author_username='benny',
+            title='Test Entry',
+            author_username='admin',
             content='## This is the entries content.',
             contentr='<h2>This is the entries content.</h2>',
             created=now,
@@ -62,14 +62,14 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-        benny = User(
-            username="benny",
-            password=pwd_context.hash("password"),
-            firstname="Benjamin",
-            lastname="Petty",
-            email="benjamin.s.petty@gmail.com",
+        admin = User(
+            username="admin",
+            password="password",
+            firstname="Admin",
+            lastname="Admin",
+            email="admin@email.com",
             author=True,
             admin=True,
-            bio="Bio."
+            bio=""
         )
-        dbsession.add(benny)
+        dbsession.add(admin)

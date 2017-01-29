@@ -9,8 +9,7 @@ import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .lj_models import Jentry  # noqa
-from .lj_models import User  # noqa
+from .lj_models import Jentry, User  # noqa
 
 
 # run configure_mappers after defining all of the models to ensure

@@ -1,6 +1,23 @@
 # Pyramid Learning Journal Project
 
-This repo contains the source code for my personal learning journal—created in Python using Pyramid's "alchemy" starter scaffold and Postgres. It is deployed on Heroku at http://mylearningjournal.herokuapp.com
+This repo contains the source code for my personal learning journal—a blog app created in Python using Pyramid's "alchemy" starter scaffold. It is deployed at http://mylearningjournal.herokuapp.com
+
+## Application dependencies:
+
+- 'pyramid'
+- 'pyramid_jinja2'
+- 'pyramid_debugtoolbar'
+- 'pyramid_tm'
+- 'ipython'
+- 'pyramid_ipython'
+- 'SQLAlchemy'
+- 'transaction'
+- 'zope.sqlalchemy'
+- 'waitress'
+- 'markdown'
+- 'bleach'
+- 'psycopg2'
+- 'passlib'
 
 To get started with your own version of this learning journal:
 ```bash
@@ -15,7 +32,7 @@ $ initialize_db development.ini
 $ pserve development.ini --reload
 ```
 
-When initializing your new database, a default entry is created which you can edit or delete.
+When initializing your new database, a default entry is created which you can edit or delete. A default super user is also initialized with the username `admin` and password `password`. You can/should change this users details through the web app itself or edit the fields before initialization in `scripts/initalizedb.py`
 
 ## Deployment via Heroku
 
@@ -60,44 +77,9 @@ Found within `routes.py` and `views/default.py`. The pages are rendered via the 
 
 ## Testing
 
-Running `$ pytest learning_journal --cov=learning_journal` runs the tests with coverage reports.
+### Testing Dependencies
 
-```
----------- coverage: platform darwin, python 3.5.2-final-0 -----------
-Name                                       Stmts   Miss  Cover
---------------------------------------------------------------
-learning_journal/__init__.py                  10      7    30%
-learning_journal/models/__init__.py           22      0   100%
-learning_journal/models/jentry_model.py       11      0   100%
-learning_journal/models/meta.py                5      0   100%
-learning_journal/routes.py                     8      0   100%
-learning_journal/scripts/__init__.py           0      0   100%
-learning_journal/scripts/initializedb.py      30     19    37%
-learning_journal/views/__init__.py             0      0   100%
-learning_journal/views/default.py             46      2    96%
-learning_journal/views/notfound.py             4      2    50%
---------------------------------------------------------------
-TOTAL                                        136     30    78%
-```
+- Pytest
+- ​
 
-### Unit Tests
-
-- `test_new_jentry` Tests that new journal entries are added to the database.
-- `test_list_view_returns_empty_when_empty` If there are no journal entries the list view should return nothing.
-- `test_list_view_returns_objects_when_exist` If there are journal entries list view should return them.
-- `test_detail_view_returns_dict_with_one_object` Detail view should return a dictionary.
-- `test_detail_view_for_jentry_not_found` Detail view should return 404 error if nonexistent.
-- `test_create_view_returns_empty_dict` Create view should return an empty dictionary.
-- `test_create_view_submission_adds_new_jentry` Create view submission should add jentry to the DB.
-- `test_update_view_returns_jentry` The update view's title should match the corresponding row.
-- `test_update_view_submit_updates_existing_obj` Make sure the change reflects in the database.
-- `test_delete_view_contains_jentry` Make sure you are deleting the right entry.
-
-### Functional Tests
-
-- `test_list_route_has_table` Test that the list route contains a table.
-- `test_list_route_has_empty_table` Test that the table is only a header row when DB is empty.
-- `test_empty_detail_route_returns_error` Test for a 404 response code on an invalid key.
-- `test_list_route_has_filled_table` Test the table on list route when the databse is filled.
-- `test_detail_route_returns_info` Make sure detail route prints the contents of the intialized DB.
-
+Running `$ pytest --cov` runs the tests with coverage reports.
