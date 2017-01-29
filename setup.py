@@ -34,6 +34,7 @@ tests_require = [
     'pytest-cov',
     'tox',
     'faker',
+    'coveralls',
 ]
 
 setup(name='learning_journal',
