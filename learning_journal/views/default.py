@@ -27,7 +27,7 @@ from passlib.apps import custom_app_context as pwd_context
     permission=NO_PERMISSION_REQUIRED,
 )
 def list_view(request):
-    """Homepage view lists all existing journal entries."""
+    """List all existing journal entries."""
     try:
         journal = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
     except DBAPIError:
@@ -53,7 +53,7 @@ def list_view(request):
     permission=NO_PERMISSION_REQUIRED,
 )
 def detail_view(request):
-    """Detail view expands an individual entry."""
+    """Expand an individual entry."""
     jentry_id = int(request.matchdict["id"])
     jentry = request.dbsession.query(Jentry).get(jentry_id)
     if not jentry:

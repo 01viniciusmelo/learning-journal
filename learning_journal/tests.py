@@ -8,8 +8,8 @@ from learning_journal.models import (
     Jentry,
     User,
     get_tm_session,
-    get_engine,
-    get_session_factory,
+    # get_engine,
+    # get_session_factory,
 )
 from learning_journal.models.meta import Base
 
@@ -20,9 +20,6 @@ import os
 import transaction
 
 from passlib.apps import custom_app_context as pwd_context
-
-
-# ================================ TEST MODELS ============================= #
 
 
 FAKE = faker.Faker()
@@ -87,66 +84,103 @@ USERS = [
 ]
 
 
-# =========================== FIXTURES ====================================== #
-
-
 @pytest.fixture(scope="session")
-def sqlengine(request):
-    """Configurator."""
-    settings = {'sqlalchemy.url': os.environ["DATABASE_URL"]}
+def configuration(request):
+    """Set up a Configurator instance.
+
+    Sets up a pointer to the location of the
+        database, including models.
+
+    Tears everything down, including the in-memory database.
+    """
+    settings = {
+        'sqlalchemy.url': 'postgres:///test_learning_journal'
+    }
     config = testing.setUp(settings=settings)
     config.include('learning_journal.models')
     config.include('learning_journal.routes')
-    engine = get_engine(settings)
-    Base.metadata.create_all(engine)
 
     def teardown():
         testing.tearDown()
-        transaction.abort()
-        Base.metadata.drop_all(engine)
 
     request.addfinalizer(teardown)
-    return engine
+    return config
 
 
 @pytest.fixture(scope="function")
-def db_session(sqlengine, request):
-    """Create test DB session."""
-    session_factory = get_session_factory(sqlengine)
-    session = get_tm_session(session_factory, transaction.manager)
+def db_session(configuration, request):
+    """Create test DB session.
+
+    This uses the dbsession_factory on the configurator instance to create a
+    new database session. It binds that session to the available engine
+    and returns a new session for every call of the dummy_request object.
+    """
+    import pdb; pdb.set_trace()
+    SessionFactory = configuration.registry['dbsession_factory']  # noqa
+    session = SessionFactory()
+    engine = session.bind
+    Base.metadata.create_all(engine)
 
     def teardown():
-        transaction.abort()
+        session.transaction.rollback()
+        Base.metadata.drop_all(engine)
 
     request.addfinalizer(teardown)
     return session
 
 
 @pytest.fixture
-def dummy_request(db_session, method="GET"):
-    """Make a fake HTTP GET request with DB Session."""
-    request = testing.DummyRequest
-    request.method = method
-    request.dbsession = db_session
-    return request
+def dummy_request(db_session):
+    """Fake HTTP Request.
+
+    Instantiate a fake HTTP Request, complete with a database session.
+    This is a function-level fixture, so every new request will have a
+    new database session.
+    """
+    return testing.DummyRequest(dbsession=db_session)
 
 
 @pytest.fixture
-def dummy_post_request(db_session, method="POST"):
-    """Make a fake HTTP POST request with a DB Session."""
-    request = testing.DummyRequest()
-    request.method = method
-    request.dbsession = db_session
-    return request
+def add_models(dummy_request):
+    """Add model instances to DB.
 
+    Every test that includes this fixture will add new random jentrys.
+    """
+    dummy_request.dbsession.add_all(JENTRYS)
+
+
+# ======================= UNIT TESTS ======================================== #
+
+# def test_new_jentry_is_added(db_session):
+#     """New expenses get added to the database."""
+#     db_session.add_all(JENTRYS)
+#     query = db_session.query(Expense).all()
+#     assert len(query) == len(EXPENSES)
+
+
+# ============================== FUNCTIONAL TESTS =========================== #
+
+
+# ---- setup ---------------------------------------------------------------- #
 
 @pytest.fixture
 def testapp():
-    """Create an instance of webtests TestApp for testing routes."""
+    """Create an instance of webtests TestApp for testing routes.
+
+    With the alchemy scaffold we need to add to our test application the
+    setting for a database to be used for the models.
+    We have to then set up the database by starting a database session.
+    Finally we have to create all of the necessary tables that our app
+    normally uses to function.
+    The scope of the fixture is function-level, so every test will get a new
+    test application.
+    """
     from webtest import TestApp
     from learning_journal import main
 
-    app = main({}, **{'sqlalchemy.url': os.environ["DATABASE_URL"]})
+    import pdb; pdb.set_trace()
+
+    app = main({}, **{'sqlalchemy.url': 'postgres:///test_learning_journal'})
     testapp = TestApp(app)
     session_factory = app.registry["dbsession_factory"]
     engine = session_factory().bind
@@ -159,6 +193,7 @@ def testapp():
 @pytest.fixture
 def fill_the_db(testapp):
     """Generate model instances in the db."""
+    import pdb; pdb.set_trace()
     SessionFactory = testapp.app.registry["dbsession_factory"]  # noqa
     with transaction.manager:
         dbsession = get_tm_session(
@@ -172,8 +207,7 @@ def fill_the_db(testapp):
     return dbsession
 
 
-# ============================== FUNCTIONAL TESTS =========================== #
-
+# ------------- TESTS ------------------------------------------------------- #
 
 def test_home_page_pops_up(testapp):
     """Test that home page get sent correctly."""
