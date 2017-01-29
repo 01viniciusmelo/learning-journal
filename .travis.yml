@@ -19,7 +19,7 @@ install:
 
 # command to run tests
 script: 
-  - pytest
+  - py.test
 
 # safelist
 branches:
