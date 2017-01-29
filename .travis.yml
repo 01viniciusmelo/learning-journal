@@ -14,12 +14,11 @@ before_script:
 
 # command to install dependencies
 install:
-  - pip install -e .
-  - pip install -e .[testing]
+  - pip -r requirements.txt
 
 # command to run tests
 script: 
-  - py.test
+  - py.test --cov
 
 # safelist
 branches:
