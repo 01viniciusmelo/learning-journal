@@ -1,6 +1,10 @@
-# Pyramid Learning Journal Project
+[![Build Status](https://travis-ci.org/benpetty/Learning-Journal.svg?branch=security)](https://travis-ci.org/benpetty/Learning-Journal) [![Coverage Status](https://coveralls.io/repos/github/benpetty/Learning-Journal/badge.svg?branch=security)](https://coveralls.io/github/benpetty/Learning-Journal?branch=security)
 
-This repo contains the source code for my personal learning journal—a blog app created in Python using Pyramid's "alchemy" starter scaffold. It is deployed at http://mylearningjournal.herokuapp.com
+# **Pyramid Learning Journal Project**
+
+***
+
+This repo contains the source code for my personal learning journal—a blog app created in Python using Pyramid's *alchemy* starter scaffold. It is deployed at http://mylearningjournal.herokuapp.com
 
 ## Application dependencies:
 
@@ -80,6 +84,5 @@ Found within `routes.py` and `views/default.py`. The pages are rendered via the 
 ### Testing Dependencies
 
 - Pytest
-- ​
-
-Running `$ pytest --cov` runs the tests with coverage reports.
+- Coverage
+- Tox
