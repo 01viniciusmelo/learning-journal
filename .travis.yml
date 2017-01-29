@@ -6,6 +6,9 @@ python:
 services:
   - postgresql
 
+env:
+  - DATABASE_URL=postgres:///learning_journal
+
 before_script:
   - psql -c "create database learning_journal;" -U postgres
 
