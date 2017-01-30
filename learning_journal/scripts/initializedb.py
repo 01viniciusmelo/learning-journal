@@ -10,16 +10,17 @@ from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
-
 from pyramid.scripts.common import parse_vars
 
-from ..models.meta import Base
-from ..models import (
+from learning_journal.models.meta import Base
+from learning_journal.models import (
     get_engine,
     get_session_factory,
     get_tm_session,
+    Jentry,
+    User,
 )
-from ..models import Jentry
+from passlib.apps import custom_app_context as pwd_context
 
 
 def usage(argv):
@@ -37,24 +38,38 @@ def main(argv=sys.argv):
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)  # Access database
+    settings = get_appsettings(config_uri, options=options)
     settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
-    engine = get_engine(settings)  # Start interaction
 
+    engine = get_engine(settings)
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-
     session_factory = get_session_factory(engine)
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
         now = datetime.datetime.now()
-        jentry_model = Jentry(
-            title='First Entry',
+        jentry_init = Jentry(
+            title='Test Entry',
+            author_username='admin',
             content='## This is the entries content.',
             contentr='<h2>This is the entries content.</h2>',
             created=now,
             modified=now,
-            category='Empty Category'
+            category='Empty Category',
         )
-        dbsession.add(jentry_model)
+        dbsession.add(jentry_init)
+
+    with transaction.manager:
+        dbsession = get_tm_session(session_factory, transaction.manager)
+        admin = User(
+            username="admin",
+            password="password",
+            firstname="Admin",
+            lastname="Admin",
+            email="admin@email.com",
+            author=True,
+            admin=True,
+            bio=""
+        )
+        dbsession.add(admin)

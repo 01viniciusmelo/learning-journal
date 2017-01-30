@@ -1,0 +1,68 @@
+{% extends "layout.jinja2" %}
+
+{% block title %}Users{% endblock %}
+
+{% block body %}
+<table class="u-full-width">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Real Name</th>
+      <th>Email</th>
+      <th>ACL</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for user in users %}
+      {% if user.admin %}
+        <tr>
+          <td><b>
+            <a href="{{ request.route_url('profile', username=user.username) }}">
+              {{ user.username }}
+            </a></b>
+          </td>
+          <td><b>{{ user.firstname }} {{ user.lastname }}</b></td>
+          <td><b>{{ user.email }}</b></td>
+          <td><b>Admin</b></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+
+    {% for user in users %}
+      {% if not user.admin and user.author %}
+        <tr>
+          <td>
+            <a href="{{ request.route_url('profile', username=user.username) }}">
+              {{ user.username }}
+            </a>
+          </td>
+          <td>{{ user.firstname }} {{ user.lastname }}</td>
+          <td>{{ user.email }}</td></b>
+          <td>Author</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+
+    {% for user in users %}
+      {% if not user.admin and not user.author %}
+        <tr>
+          <td>
+            <a href="{{ request.route_url('profile', username=user.username) }}">
+              {{ user.username }}
+            </a>
+          </td>
+          <td>{{ user.firstname }} {{ user.lastname }}</td>
+          <td>{{ user.email }}</td>
+          <td>User</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="button" href="{{ request.route_url('admin_register')}}">
+  Create User Account
+</a>
+
+{% endblock %}

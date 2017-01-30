@@ -4,20 +4,26 @@
 import pytest
 from pyramid import testing
 
-from learning_journal.models import Jentry, get_tm_session
+from learning_journal.models import (
+    Jentry,
+    User,
+    get_tm_session,
+    # get_engine,
+    # get_session_factory,
+)
 from learning_journal.models.meta import Base
 
 import faker
 import datetime
 import random
-import os
 import transaction
 
+from passlib.apps import custom_app_context as pwd_context
 
-# ================================ TEST JENTRYS ============================= #
 
 FAKE = faker.Faker()
 now = datetime.datetime.now()
+
 CATEGORIES = [
     "history",
     "economics",
@@ -36,19 +42,60 @@ JENTRYS = [
         title=FAKE.job(),
         content=FAKE.text(max_nb_chars=200),
         contentr='',
+        author_username=FAKE.first_name(),
         created=now,
         modified=now,
-        category=random.choice(CATEGORIES)
+        category=random.choice(CATEGORIES),
     ) for i in range(100)
 ]
 
+USERS = [
+    User(
+        username='admin',
+        password=pwd_context.hash('password'),
+        firstname='bob',
+        lastname='dobalina',
+        email='admin@imager.com',
+        author=True,
+        admin=True,
+        bio='I am an admin.',
+    ),
+    User(
+        username='author',
+        password=pwd_context.hash('authorpassword'),
+        firstname='bob',
+        lastname='dobalina',
+        email='author@imager.com',
+        author=True,
+        admin=False,
+        bio='I am an author.',
+    ),
+    User(
+        username='user',
+        password=pwd_context.hash('userpassword'),
+        firstname='bob',
+        lastname='dobalina',
+        email='user@imager.com',
+        author=False,
+        admin=False,
+        bio='I am but a meer user.',
+    ),
+]
 
-# =========================== UNIT TESTS SESSION ============================ #
 
 @pytest.fixture(scope="session")
 def configuration(request):
-    """Configurator."""
-    config = testing.setUp(settings={'sqlalchemy.url': 'sqlite:///:memory:'})
+    """Set up a Configurator instance.
+
+    Sets up a pointer to the location of the
+        database, including models.
+
+    Tears everything down, including the in-memory database.
+    """
+    settings = {
+        'sqlalchemy.url': 'postgres:///test_learning_journal'
+    }
+    config = testing.setUp(settings=settings)
     config.include('learning_journal.models')
     config.include('learning_journal.routes')
 
@@ -59,9 +106,14 @@ def configuration(request):
     return config
 
 
-@pytest.fixture()
+@pytest.fixture
 def db_session(configuration, request):
-    """Create test DB session."""
+    """Create test DB session.
+
+    This uses the dbsession_factory on the configurator instance to create a
+    new database session. It binds that session to the available engine
+    and returns a new session for every call of the dummy_request object.
+    """
     SessionFactory = configuration.registry['dbsession_factory']  # noqa
     session = SessionFactory()
     engine = session.bind
@@ -69,6 +121,7 @@ def db_session(configuration, request):
 
     def teardown():
         session.transaction.rollback()
+        Base.metadata.drop_all(engine)
 
     request.addfinalizer(teardown)
     return session
@@ -76,198 +129,120 @@ def db_session(configuration, request):
 
 @pytest.fixture
 def dummy_request(db_session):
-    """Make a fake HTTP request with DB Session."""
+    """Fake HTTP Request.
+
+    Instantiate a fake HTTP Request, complete with a database session.
+    This is a function-level fixture, so every new request will have a
+    new database session.
+    """
     return testing.DummyRequest(dbsession=db_session)
 
 
 @pytest.fixture
 def add_models(dummy_request):
-    """Generate model instances in the db."""
+    """Add model instances to DB.
+
+    Every test that includes this fixture will add new random jentrys.
+    """
     dummy_request.dbsession.add_all(JENTRYS)
 
 
-# ============================== UNIT TESTS ================================= #
+# ======================= UNIT TESTS ======================================== #
 
-def test_new_jentry(db_session):
-    """New journals are added to the database."""
+def test_new_jentry_is_added(
+        db_session):
+    """New journal entry should be added to the database."""
     db_session.add_all(JENTRYS)
     query = db_session.query(Jentry).all()
     assert len(query) == len(JENTRYS)
 
 
-def test_list_view_returns_empty_when_empty(dummy_request):
-    """Test that the list view returns nothing."""
-    from learning_journal.views.default import list_view
+def test_list_view_returns_empty_when_empty(
+        dummy_request):
+    """Test that the list view returns no objects when none added."""
+    from .views.default import list_view
     result = list_view(dummy_request)
     assert len(result["journal"]) == 0
 
 
-def test_list_view_returns_objects_when_exist(dummy_request, add_models):
-    """Test that list view returns objects when they exist in the DB."""
-    from learning_journal.views.default import list_view
+def test_list_view_returns_objects_when_exist(
+        dummy_request, add_models):
+    """Test that the list view does return objects when the DB is populated."""
+    from .views.default import list_view
     result = list_view(dummy_request)
     assert len(result["journal"]) == 100
 
 
-def test_detail_view_returns_dict_with_one_object(dummy_request, add_models):
-    """Detail view should return a dict."""
-    from learning_journal.views.default import detail_view
-    dummy_request.matchdict["id"] = "4"
+def test_detail_view_contains_individual_expense_details(
+        db_session, dummy_request, add_models):
+    """Test that the detail view actually returns individual entry info."""
+    from .views.default import detail_view
+    dummy_request.matchdict["id"] = 12
+    jentry = db_session.query(Jentry).get(12)
     result = detail_view(dummy_request)
-    jentry = dummy_request.dbsession.query(Jentry).get(4)
     assert result["jentry"] == jentry
 
 
-def test_detail_view_for_jentry_not_found(dummy_request):
-    """Nonexistent jentrys return 404 error."""
-    from learning_journal.views.default import detail_view
-    dummy_request.matchdict["id"] = "2103944"
-    result = detail_view(dummy_request)
-    assert result.status_code == 404
+# ============================== FUNCTIONAL TESTS =========================== #
 
 
-def test_create_view_returns_empty_dict(dummy_request):
-    """Get create view should return an empty dict."""
-    from learning_journal.views.default import create_view
-    assert create_view(dummy_request) == {}
+# ---- setup ---------------------------------------------------------------- #
 
+@pytest.fixture
+def testapp():
+    """Create an instance of webtests TestApp for testing routes.
 
-def test_create_view_submission_adds_new_jentry(dummy_request):
-    """Submitting the new entry form creates a new jentry in the db."""
-    from learning_journal.views.default import create_view
-
-    query = dummy_request.dbsession.query(Jentry)
-    count = query.count()
-
-    dummy_request.method = "POST"
-    dummy_request.POST["title"] = "test title"
-    dummy_request.POST["content"] = "## Test content."
-    dummy_request.POST["contentr"] = "<h2>Test content.</h2>"
-    dummy_request.POST["created"] = now
-    dummy_request.POST["lastmodified"] = now
-    dummy_request.POST["category"] = 'Empty Category'
-    create_view(dummy_request)
-
-    new_count = query.count()
-    assert new_count == count + 1
-
-
-def test_update_view_returns_jentry(dummy_request, add_models):
-    """Update view should return matching jentry data."""
-    from learning_journal.views.default import update_view
-    dummy_request.matchdict["id"] = "4"
-    result = update_view(dummy_request)
-    jentry = dummy_request.dbsession.query(Jentry).get(4)
-    assert result["jentry"].title == jentry.title
-
-
-def test_update_view_submit_updates_exisiting_obj(dummy_request, add_models):
-    """Submitting in the edit view should update the object."""
-    from learning_journal.views.default import update_view
-
-    query = dummy_request.dbsession.query(Jentry)
-
-    dummy_request.method = "POST"
-    dummy_request.matchdict["id"] = "4"
-    dummy_request.POST["title"] = "test title"
-    dummy_request.POST["content"] = "## Test content."
-    dummy_request.POST["contentr"] = "<h2>Test content.</h2>"
-    dummy_request.POST["created"] = now
-    dummy_request.POST["lastmodified"] = now
-    dummy_request.POST["category"] = 'Empty Category'
-    update_view(dummy_request)
-
-    jentry = query.get(4)
-    assert jentry.title == "test title"
-
-
-def test_delete_view_contains_jentry(dummy_request, add_models):
-    """Test that delete view contains jentry."""
-    from learning_journal.views.default import delete_view
-    dummy_request.matchdict["id"] = "4"
-    result = delete_view(dummy_request)
-    jentry = dummy_request.dbsession.query(Jentry).get(4)
-    assert result["jentry"].title == jentry.title
-
-
-# =========================== FUNCTIONAL TESTS SESSION ====================== #
-
-@pytest.fixture(scope="session")
-def testapp(request):
-    """Test routes."""
+    With the alchemy scaffold we need to add to our test application the
+    setting for a database to be used for the models.
+    We have to then set up the database by starting a database session.
+    Finally we have to create all of the necessary tables that our app
+    normally uses to function.
+    The scope of the fixture is function-level, so every test will get a new
+    test application.
+    """
     from webtest import TestApp
-    from pyramid.config import Configurator
+    from learning_journal import main
 
-    def main(global_config, **settings):
-        """Return a pyramid WSGI application."""
-        settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
-        config = Configurator(settings=settings)
-        config.include('pyramid_jinja2')
-        config.include('.models')
-        config.include('.routes')
-        config.scan()
-        return config.make_wsgi_app()
-
-    app = main({}, **{})
+    app = main({}, **{'sqlalchemy.url': 'postgres:///test_learning_journal'})
     testapp = TestApp(app)
-
-    SessionFactory = app.registry["dbsession_factory"]  # noqa
-    engine = SessionFactory().bind
+    session_factory = app.registry["dbsession_factory"]
+    engine = session_factory().bind
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
-    def tear_down():
-        Base.metadata.drop_all(bind=engine)
-
-    request.addfinalizer(tear_down)
     return testapp
 
 
 @pytest.fixture
-def fill_db(testapp):
-    """Fill database with Jentrys."""
+def fill_the_db(testapp):
+    """Generate model instances in the db."""
     SessionFactory = testapp.app.registry["dbsession_factory"]  # noqa
     with transaction.manager:
-        dbsession = get_tm_session(SessionFactory, transaction.manager)
-        dbsession.add_all(JENTRYS)
+        dbsession = get_tm_session(
+            SessionFactory,
+            transaction.manager
+        )
 
-        return dbsession
+    dbsession.add_all(JENTRYS)
+    dbsession.add_all(USERS)
+
+    return dbsession
 
 
-# ============================ FUNCTIONAL TESTS ============================= #
+# ------------- TESTS ------------------------------------------------------- #
 
-
-# ---------------------------------------------------------- EMPTY DB TESTS - #
-
-def test_list_route_has_table(testapp):
-    """The index contains an html table."""
+def test_home_page_pops_up(testapp):
+    """Test that home page get sent correctly."""
     response = testapp.get('/', status=200)
-    html = response.html
-    assert len(html.find_all("table")) == 1
+    assert response.status_code == 200
 
 
-def test_list_route_has_empty_table(testapp):
-    """The table should only have a header row."""
-    response = testapp.get('/', status=200)
-    html = response.html
-    assert len(html.find_all("tr")) == 1
-
-
-def test_empty_detail_route_returns_error(testapp):
-    """Route to a nonexistent detail page should return a 404."""
-    response = testapp.get("/journal/4", status=404)
-    assert response.status_code == 404
-
-
-# --------------------------------------------------------- FILLED DB TESTS - #
-
-def test_list_route_has_filled_table(testapp, fill_db):
-    """If journal is populated, the home page contains equal number of rows."""
-    response = testapp.get('/', status=200)
-    html = response.html
-    assert len(html.find_all("tr")) == 101
-
-
-def test_detail_route_returns_info(testapp):
-    """Detail route should have content."""
-    response = testapp.get("/journal/4")
-    assert "Category — Empty Category" in response.text
+def test_successful_login_leads_somewhere(testapp, fill_the_db):
+    """Test that after logging in it sends you somewhere."""
+    response = testapp.post(
+        '/login',
+        params={
+            'username': 'admin',
+            'password': 'password'}
+    )
+    assert response.status_code == 200

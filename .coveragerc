@@ -1,3 +1,9 @@
 [run]
-source = learning_journal
-omit = learning_journal/test*
+source =
+    learning_journal
+
+omit =
+    learning_journal/test*
+
+[report]
+show_missing = True
