@@ -5,6 +5,7 @@
 <h1>Login</h1>
 
 <form method="POST">
+<input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
     <p>
         <label for="username">Username: </label>
         <input type="text" name="username" />

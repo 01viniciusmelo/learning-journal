@@ -93,4 +93,4 @@ export AUTH_SECRET="potato"
 
 ## Credits
 
-by [Ben Petty](https://github.com/benpetty). Borrows much from [expense tracker](https://github.com/nhuntwalker/expense_tracker) by Nicholas Hunt-Walker, my instructor.
+by [Ben Petty](https://github.com/benpetty). Borrows much from [Expense Tracker](https://github.com/nhuntwalker/expense_tracker) by Nicholas Hunt-Walker, my instructor.
