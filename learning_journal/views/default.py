@@ -181,7 +181,7 @@ def register_view(request):
         if request.POST["username"] and len(
                 request.POST["username"].split()) > 1:
             new_name = request.POST["username"].split()
-            new_name = str.lower(u'_'.join(new_name))
+            new_name = str.lower('_'.join(new_name))
         else:
             new_name = request.POST["username"]
             new_name = str.lower(new_name)
@@ -400,7 +400,7 @@ def admin_register_view(request):
         if request.POST["username"] and len(
                 request.POST["username"].split()) > 1:
             new_name = request.POST["username"].split()
-            new_name = str.lower(u'_'.join(new_name))
+            new_name = str.lower('_'.join(new_name))
         else:
             new_name = request.POST["username"]
             new_name = str.lower(new_name)
