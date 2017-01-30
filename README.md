@@ -12,8 +12,6 @@ This repo contains the source code for my personal learning journal—a blog app
 - 'pyramid_jinja2'
 - 'pyramid_debugtoolbar'
 - 'pyramid_tm'
-- 'ipython'
-- 'pyramid_ipython'
 - 'SQLAlchemy'
 - 'transaction'
 - 'zope.sqlalchemy'
@@ -23,12 +21,13 @@ This repo contains the source code for my personal learning journal—a blog app
 - 'psycopg2'
 - 'passlib'
 
+## Development
+
 To get started with your own version of this application:
 ```bash
 # 1. Clone this repo.
 # 2. Initialize/activate your virtual environment.
 # 3. Install all the required packages, including testing:
-$ pip install -e . 
 $ pip install -e .[testing]
 # 4. Erase any existing entries and initialize a new database for your local environment:
 $ initialize_db development.ini
@@ -50,12 +49,29 @@ initialize_db production.ini
 python runapp.py
 ```
 
-`$ git add run`, `$ git commit -m 'some message'` and then `$ git push heroku master` will upload the app and initializes the database. Go back to the `run` file and comment out line 4 `# initialize_db production.ini` and repeat the ACP.
+`$ git add run`, `$ git commit -m 'Initialize server with database.'` and then `$ git push heroku master` will upload the app and initializes the database. Go back to the `run` file and comment out line 4 `# initialize_db production.ini` and repeat the ACP.
 
 ## Models
 
-- **Jentry** - A journal entry/blog post. Properties include: `id` (primary key), `title`, `author_username`, `content` (can be plain text or Markdown), `contentr` (content after being rendered to HTML), `created` (DateTime object), `modfied` (DateTime object), and `category`.
-- **User** - Application user models. Properties include: `id` (primary key), `username`, hashed `password`, `firstname`, `lastname`, `email`, `bio`, `author` privilages (Boolean), `admin` privileges (Boolean).
+- **Jentry** - A journal entry/blog post. Properties include: 
+  - `id` (primary key)
+  - `title`
+  - `author_username`
+  - `content` (can be plain text or Markdown)
+  - `contentr` (content after being rendered to HTML)
+  - `created` (DateTime object)
+  - `modfied` (DateTime object)
+  - `category`
+- **User** - Application user models. Properties include:
+  - `id` (primary key)
+  - `username`
+  - hashed `password`
+  - `firstname`
+  - `lastname`
+  - `email`
+  - `bio`
+  - `author` privileges (Boolean)
+  - `admin` privileges (Boolean)
 
 ## Environment Variables
 
