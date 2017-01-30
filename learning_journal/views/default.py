@@ -25,6 +25,7 @@ from passlib.apps import custom_app_context as pwd_context
     route_name="list",
     renderer="../templates/list.jinja2",
     permission=NO_PERMISSION_REQUIRED,
+    require_csrf=False,
 )
 def list_view(request):
     """List all existing journal entries."""
@@ -51,6 +52,7 @@ def list_view(request):
     route_name="detail",
     renderer="../templates/detail.jinja2",
     permission=NO_PERMISSION_REQUIRED,
+    require_csrf=False,
 )
 def detail_view(request):
     """Expand an individual entry."""
@@ -85,6 +87,7 @@ def detail_view(request):
     route_name="profile",
     renderer="../templates/profile.jinja2",
     permission=NO_PERMISSION_REQUIRED,
+    require_csrf=False,
 )
 def profile_view(request):
     """View or edit your user profile."""
@@ -127,6 +130,7 @@ def profile_view(request):
     route_name="login",
     renderer="../templates/login.jinja2",
     permission=NO_PERMISSION_REQUIRED,
+    require_csrf=False,
 )
 def login_view(request):
     """Login view."""
@@ -160,6 +164,7 @@ def login_view(request):
 @view_config(
     route_name="logout",
     permission=NO_PERMISSION_REQUIRED,
+    require_csrf=False,
 )
 def logout_view(request):
     """Logout view."""
@@ -174,6 +179,7 @@ def logout_view(request):
     route_name="register",
     renderer="../templates/register.jinja2",
     permission=NO_PERMISSION_REQUIRED,
+    require_csrf=False,
 )
 def register_view(request):
     """Registration view."""
@@ -217,6 +223,7 @@ def register_view(request):
     route_name="delete_user",
     renderer="../templates/delete_user.jinja2",
     permission="view",
+    require_csrf=True,
 )
 def delete_user_view(request):
     """Delete user shows a warning pre confirmation of a user deletion."""
@@ -247,6 +254,7 @@ def delete_user_view(request):
     route_name="create",
     renderer="../templates/create.jinja2",
     permission="author",
+    require_csrf=True,
 )
 def create_view(request):
     """Create view makes a new post."""
@@ -291,6 +299,7 @@ def create_view(request):
     route_name="update",
     renderer="../templates/update.jinja2",
     permission="author",
+    require_csrf=True,
 )
 def update_view(request):
     """Update view edits an existing entry."""
@@ -320,6 +329,7 @@ def update_view(request):
     route_name="delete",
     renderer="../templates/delete.jinja2",
     permission="author",
+    require_csrf=True,
 )
 def delete_view(request):
     """Delete view shows a warning pre confirmation of an entry deletion."""
@@ -341,7 +351,8 @@ def delete_view(request):
 
 @view_config(
     route_name="delete_forever",
-    permission="author"
+    permission="author",
+    require_csrf=True,
 )
 def delete_forever_view(request):
     """Delete forever permanently removes an entry from the database."""
@@ -370,6 +381,7 @@ def delete_forever_view(request):
     route_name="users",
     renderer="../templates/users.jinja2",
     permission="admin",
+    require_csrf=True,
 )
 def users_view(request):
     """Add/edit/delete users and grant permissions."""
@@ -393,6 +405,7 @@ def users_view(request):
     route_name="admin_register",
     renderer="../templates/register.jinja2",
     permission="admin",
+    require_csrf=True,
 )
 def admin_register_view(request):
     """Registration view."""
@@ -425,6 +438,7 @@ def admin_register_view(request):
 @view_config(
     route_name='delete_user_forever',
     permission="admin",
+    require_csrf=True,
 )
 def delete_user_forever_view(request):
     """Delete user from the DB."""

@@ -11,6 +11,7 @@
 
 {# BEGIN FORM #}
 <form method="POST">
+<input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
   <div class="row">
     <div class="six columns">
       <label for="title-input">Title</label>
