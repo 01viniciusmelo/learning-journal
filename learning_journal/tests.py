@@ -237,6 +237,24 @@ def test_home_page_pops_up(testapp):
     assert response.status_code == 200
 
 
+def test_register_new_user(testapp):
+    """Registration page should create a new user in the database."""
+    user = {
+        'username': 'bobbydobalina',
+        'password': 'password',
+        'firstname': 'bob',
+        'lastname': 'dobalina',
+        'email': 'email@address.com',
+        'bio': 'bio',
+
+    }
+    html = testapp.post('/register', user, status=302).follow().html
+    assert 'email@address.com' in html.find_all('li')[2].text
+    assert 'bob dobalina' in html.find_all('li')[1].text
+
+
+# ------------- TESTS WITH FILLED DATABASE ---------------------------------- #
+
 def test_successful_login_leads_somewhere(testapp, fill_the_db):
     """Test that after logging in it sends you somewhere."""
     response = testapp.post(
