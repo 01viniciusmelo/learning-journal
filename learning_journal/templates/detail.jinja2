@@ -8,9 +8,8 @@
     <br />Created — {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
     {% if jentry.created != jentry.modified %}
     <br />Last modified — {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
-    <br />Category — {{ jentry.category }}
     {% endif %}
-    <br />File under: {{ jentry.category }}
+    <br />Category — {{ jentry.category }}
 </p>
 <hr>
 <p>{{ jentry.contentr }}</p>
