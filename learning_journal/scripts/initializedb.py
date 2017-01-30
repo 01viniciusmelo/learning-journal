@@ -20,7 +20,6 @@ from learning_journal.models import (
     Jentry,
     User,
 )
-from passlib.apps import custom_app_context as pwd_context
 
 
 def usage(argv):
@@ -72,4 +71,15 @@ def main(argv=sys.argv):
             admin=True,
             bio=""
         )
+        benny = User(
+            username="benny",
+            password="password",
+            firstname="Ben",
+            lastname="Petty",
+            email="benjamin.s.petty@gmail.com",
+            author=True,
+            admin=True,
+            bio="",
+        )
         dbsession.add(admin)
+        dbsession.add(benny)
