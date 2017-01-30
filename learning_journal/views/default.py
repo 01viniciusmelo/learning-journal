@@ -271,9 +271,16 @@ def create_view(request):
         request.dbsession.add(jentry)
         return HTTPFound(request.route_url('list'))
     try:
-        journal = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
+        journal = request.dbsession.query(
+            Jentry).order_by(
+                Jentry.id.desc()
+        )
     except DBAPIError:
-        return Response(db_err_msg, content_type='text/plain', status=500)
+        return Response(
+            db_err_msg,
+            content_type='text/plain',
+            status=500
+        )
     return {
         "user": user,
         "journal": journal.all()

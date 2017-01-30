@@ -16,7 +16,6 @@ from learning_journal.models.meta import Base
 import faker
 import datetime
 import random
-import os
 import transaction
 
 from passlib.apps import custom_app_context as pwd_context
@@ -107,7 +106,7 @@ def configuration(request):
     return config
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def db_session(configuration, request):
     """Create test DB session.
 
@@ -115,7 +114,6 @@ def db_session(configuration, request):
     new database session. It binds that session to the available engine
     and returns a new session for every call of the dummy_request object.
     """
-    import pdb; pdb.set_trace()
     SessionFactory = configuration.registry['dbsession_factory']  # noqa
     session = SessionFactory()
     engine = session.bind
@@ -151,11 +149,38 @@ def add_models(dummy_request):
 
 # ======================= UNIT TESTS ======================================== #
 
-# def test_new_jentry_is_added(db_session):
-#     """New expenses get added to the database."""
-#     db_session.add_all(JENTRYS)
-#     query = db_session.query(Expense).all()
-#     assert len(query) == len(EXPENSES)
+def test_new_jentry_is_added(
+        db_session):
+    """New journal entry should be added to the database."""
+    db_session.add_all(JENTRYS)
+    query = db_session.query(Jentry).all()
+    assert len(query) == len(JENTRYS)
+
+
+def test_list_view_returns_empty_when_empty(
+        dummy_request):
+    """Test that the list view returns no objects when none added."""
+    from .views.default import list_view
+    result = list_view(dummy_request)
+    assert len(result["journal"]) == 0
+
+
+def test_list_view_returns_objects_when_exist(
+        dummy_request, add_models):
+    """Test that the list view does return objects when the DB is populated."""
+    from .views.default import list_view
+    result = list_view(dummy_request)
+    assert len(result["journal"]) == 100
+
+
+def test_detail_view_contains_individual_expense_details(
+        db_session, dummy_request, add_models):
+    """Test that the detail view actually returns individual entry info."""
+    from .views.default import detail_view
+    dummy_request.matchdict["id"] = 12
+    jentry = db_session.query(Jentry).get(12)
+    result = detail_view(dummy_request)
+    assert result["jentry"] == jentry
 
 
 # ============================== FUNCTIONAL TESTS =========================== #
@@ -178,8 +203,6 @@ def testapp():
     from webtest import TestApp
     from learning_journal import main
 
-    import pdb; pdb.set_trace()
-
     app = main({}, **{'sqlalchemy.url': 'postgres:///test_learning_journal'})
     testapp = TestApp(app)
     session_factory = app.registry["dbsession_factory"]
@@ -193,7 +216,6 @@ def testapp():
 @pytest.fixture
 def fill_the_db(testapp):
     """Generate model instances in the db."""
-    import pdb; pdb.set_trace()
     SessionFactory = testapp.app.registry["dbsession_factory"]  # noqa
     with transaction.manager:
         dbsession = get_tm_session(

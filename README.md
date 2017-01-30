@@ -59,11 +59,10 @@ python runapp.py
 
 ## Environment Variables
 
-Declare the environment variables `DATABASE_URL`, `TEST_DATABASE_URL`, and `AUTH_SECRET`. For example add something like this to your `bin/activate` file:
+Declare the environment variables `DATABASE_URL` and `AUTH_SECRET`. For example add something like this to your `bin/activate` file:
 
 ```
 export DATABASE_URL="postgres://username@localhost:5432/learning_journal"
-export TEST_DATABASE_URL="postgres://username@localhost:5432/test_learning_journal"
 export AUTH_SECRET="potato"
 ```
 
