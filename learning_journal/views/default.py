@@ -25,7 +25,6 @@ from passlib.apps import custom_app_context as pwd_context
     route_name="list",
     renderer="../templates/list.jinja2",
     permission=NO_PERMISSION_REQUIRED,
-    require_csrf=False,
 )
 def list_view(request):
     """List all existing journal entries."""
@@ -52,7 +51,6 @@ def list_view(request):
     route_name="detail",
     renderer="../templates/detail.jinja2",
     permission=NO_PERMISSION_REQUIRED,
-    require_csrf=False,
 )
 def detail_view(request):
     """Expand an individual entry."""
@@ -87,7 +85,6 @@ def detail_view(request):
     route_name="profile",
     renderer="../templates/profile.jinja2",
     permission=NO_PERMISSION_REQUIRED,
-    require_csrf=False,
 )
 def profile_view(request):
     """View or edit your user profile."""
@@ -130,7 +127,6 @@ def profile_view(request):
     route_name="login",
     renderer="../templates/login.jinja2",
     permission=NO_PERMISSION_REQUIRED,
-    require_csrf=False,
 )
 def login_view(request):
     """Login view."""
@@ -164,7 +160,6 @@ def login_view(request):
 @view_config(
     route_name="logout",
     permission=NO_PERMISSION_REQUIRED,
-    require_csrf=False,
 )
 def logout_view(request):
     """Logout view."""
@@ -179,7 +174,6 @@ def logout_view(request):
     route_name="register",
     renderer="../templates/register.jinja2",
     permission=NO_PERMISSION_REQUIRED,
-    require_csrf=False,
 )
 def register_view(request):
     """Registration view."""
