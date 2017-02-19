@@ -1,27 +1,55 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 {% block title %}New Entry{% endblock%}
 
 {% block body %}
-<p>New entry</p>
 
-{# BEGIN FORM #}
-<form method="POST">
-<input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
-  <div class="row">
-    <div class="six columns">
-      <label for="title">Title</label>
-      <input class="u-full-width" type="text" placeholder="Title" name="title" required>
-    </div>
-    <div class="six columns">
-      <label for="category">Category</label>
-      <input class="u-full-width" type="text" placeholder="Category" name="category" required>
-    </div>
-  </div>
-  <label for="content">Content</label>
-  <textarea rows="5" class="u-full-width" placeholder="Today, I learned..." name="content"></textarea>
-  </label>
-  <input class="button-primary" type="submit" value="Submit">
-</form>
-{# END FORM #}
+  {# BEGIN FORM #}
+  <form class="" method="POST">
+    <h1>New entry</h1>
+    <input 
+      type="hidden"
+      name="csrf_token"
+      value="{{ request.session.get_csrf_token() }}"
+      />
 
+    <label for="title">Title</label>
+    <input 
+      class="input-block-level"
+      type="text"
+      placeholder="Title"
+      name="title"
+      required
+      />
+
+    <label for="category">Category</label>
+    <input  
+      class="input-block-level"
+      type="text"
+      placeholder="Category"
+      name="category"
+      required 
+      />
+
+    <label for="content">Content</label>
+    <textarea
+      class="input-block-level" 
+      rows="10"
+      placeholder="Today, I learned..."
+      name="content"
+      ></textarea>
+
+    <input
+      class="btn btn-large btn-primary"
+      type="submit"
+      value="< Submit >"
+      >
+
+    <a
+      href="{{ request.route_url('home') }}"
+      class="btn btn-large btn-primary"
+      >Cancel
+    </a>
+
+  </form>
+  {# END FORM #}
 {% endblock %}

@@ -1,31 +1,61 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 {% block title %}Edit Entry{% endblock%}
 
 {% block body %}
-<h1>Editing "{{ jentry.title }}"</h1>
-<p>Created {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
-  {% if jentry.created != jentry.modified %}
-  <br />Last modified {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
-  {% endif %}
-</p>
 
-{# BEGIN FORM #}
-<form method="POST">
-<input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
-  <div class="row">
-    <div class="six columns">
-      <label for="title-input">Title</label>
-      <input class="u-full-width" type="text" value="{{ jentry.title }}" name="title" required>
-    </div>
-    <div class="six columns">
+  {# BEGIN FORM #}
+  <form method="POST">
+    <h1>Editing "{{ jentry.title }}"</h1>
+    <p>Created {{ jentry.created.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+      {% if jentry.created != jentry.modified %}
+    <br />Last modified {{ jentry.modified.strftime('%A, %B %d, %Y  at %-I:%M %p') }}
+      {% endif %}
+    </p>
+
+    <input
+      type="hidden"
+      name="csrf_token"
+      value="{{ request.session.get_csrf_token() }}"
+      >
+
+    <label for="title-input">Title</label>
+    <input
+      class="input-block-level"
+      type="text"
+      value="{{ jentry.title }}"
+      name="title"
+      required 
+      />
+
       <label for="category">Category</label>
-      <input class="u-full-width" type="text" value="{{ jentry.category }}" placeholder="Category" name="category" required>
-    </div>
-  </div>
-  <label for="content-input">Content</label>
-  <textarea rows="5" class="u-full-width" name="content">{{ jentry.content }}</textarea>
-  <input class="button-primary" type="submit" value="Save">
-</form>
-{# END FORM #}
+      <input
+        class="input-block-level"
+        type="text"
+        value="{{ jentry.category }}"
+        placeholder="Category"
+        name="category"
+        required
+        />
+
+      <label for="content-input">Content</label>
+      <textarea
+        rows="10"
+        class="input-block-level"
+        name="content"
+        >{{ jentry.content }}</textarea>
+
+      <input
+        class="btn btn-large btn-primary"
+        type="submit"
+        value="< Save >"
+      >
+
+    <a
+      href="{{ request.route_url('home') }}"
+      class="btn btn-large btn-primary"
+      >Cancel
+    </a>
+  </form>
+  {# END FORM #}
 
 {% endblock %}

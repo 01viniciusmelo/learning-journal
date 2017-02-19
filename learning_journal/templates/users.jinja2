@@ -1,9 +1,9 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 
 {% block title %}Users{% endblock %}
 
 {% block body %}
-<table class="u-full-width">
+<table class="table table-hover">
   <thead>
     <tr>
       <th>Username</th>
@@ -16,10 +16,13 @@
 
     {% for user in users %}
       {% if user.admin %}
-        <tr>
-          <td><b>
-            <a href="{{ request.route_url('profile', username=user.username) }}">
-              {{ user.username }}
+        <tr
+          class="clickable-row"
+          data-href="{{ request.route_url('profile', username=user.username) }}"
+          >
+          <td>
+            <b><a href="{{ request.route_url('profile', username=user.username) }}"
+            >{{ user.username }}
             </a></b>
           </td>
           <td><b>{{ user.firstname }} {{ user.lastname }}</b></td>
@@ -61,8 +64,10 @@
   </tbody>
 </table>
 
-<a class="button" href="{{ request.route_url('admin_register')}}">
-  Create User Account
+<a 
+  href="{{ request.route_url('admin_register')}}" 
+  class="btn btn-large btn-primary"
+  >Create User Account
 </a>
 
 {% endblock %}

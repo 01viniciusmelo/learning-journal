@@ -1,15 +1,22 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 {% block title %}Delete {{ delete_user.username }}{% endblock %}
 
 {% block body %}
 <h1>Delete user "<a href="{{ request.route_url('profile', username=delete_user.username) }}">{{ delete_user.username }}</a>"?</h1>
 <p>This action cannot be undone.</p>
-<p>
-  <a class="button" href="{{ request.route_url('delete_user_forever', username=delete_user.username) }}">
-    DELETE FOREVER
+
+<div>
+  <a 
+    href="{{ request.route_url('delete_user_forever', username=delete_user.username) }}"
+    class="btn btn-large btn-primary"
+    >DELETE FOREVER
   </a>
-  <a class="button" href="{{ request.route_url('profile', username=delete_user.username) }}">
-    CANCEL
+
+  <a 
+    href="{{ request.route_url('profile', username=delete_user.username) }}"
+    class="btn btn-large btn-primary"
+    >CANCEL
   </a>
-</p>
+</div>
+
 {% endblock %}

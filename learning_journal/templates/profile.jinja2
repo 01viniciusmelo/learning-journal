@@ -1,4 +1,4 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 {% block title %}
 Profile: {{ profile.firstname }} {{ profile.lastname }}
 {% endblock%}
@@ -13,26 +13,27 @@ Profile: {{ profile.firstname }} {{ profile.lastname }}
 </ul>
 
 {% if user.username == profile.username or user.admin %}
-<input type="button" class="button" id="editprofile" value="Edit Profile"/>
+<input type="button" class="btn btn-large btn-primary" id="editprofile" value="Edit Profile"/>
 {% if not profile.admin %}
 <a class="button" href="/delete_user/{{ profile.username }}">Delete User</a>
 {% endif %}
 {% endif %}
 
 <form method="POST" id="editform">
-<script>
- $(function(){
-        $('#editprofile').click(function() {
-            $('#editform').append('<label for="password">New Password: </label><input type="password" name="password"/><label for="firstname">First Name: </label><input type="text" name="firstname" value="{{ profile.firstname }}"/><label for="lastname">Last Name: </label><input type="text" name="lastname" value="{{ profile.lastname }}"/><label for="email">Email: </label><input type="email" name="email" value="{{ profile.email }}"/><label>Bio</label><input type="text" name="bio" class="u-full-width" value="{{ profile.bio }}"/><p><input type="submit" class="button" value="Submit"/></p>');
-        });
-    });
-</script>
 </form>
+<script>
+$(function(){
+  $('#editprofile').click(function() {
+    $('#editform').empty(); 
+    $('#editform').append('<label for="password">New Password: </label><input type="password" name="password"/><label for="firstname">First Name: </label><input type="text" name="firstname" value="{{ profile.firstname }}"/><label for="lastname">Last Name: </label><input type="text" name="lastname" value="{{ profile.lastname }}"/><label for="email">Email: </label><input type="email" name="email" value="{{ profile.email }}"/><label>Bio</label><textarea rows="5" class="input-block-level" name="bio" value="{{ profile.bio }}"/><p><input type="submit" class="btn btn-large btn-primary" value="Submit"/></p>');
+      });
+  });
+</script>
 
 {% if user.admin %}
   <form method="POST" id="author_toggle">
     <input type="hidden" name="author" value="{{ not profile.author }}">
-    <input type="submit" class="button" value="Toggle Author Status: Make {{ not profile.author }}"/>
+    <input type="submit" class="btn btn-large btn-primary" value="Toggle Author Status: Make {{ not profile.author }}"/>
   </form>
 {% endif %}
 

@@ -22,12 +22,12 @@ from passlib.apps import custom_app_context as pwd_context
 # ============================= PUBLIC VIEWS ================================ #
 
 @view_config(
-    route_name="list",
-    renderer="../templates/list.jinja2",
+    route_name="home",
+    renderer="../templates/home.jinja2",
     permission=NO_PERMISSION_REQUIRED,
 )
-def list_view(request):
-    """List all existing journal entries."""
+def home_view(request):
+    """List all existing journal entries on the home page."""
     try:
         journal = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
     except DBAPIError:
@@ -137,7 +137,7 @@ def login_view(request):
                 request.POST["username"]
             )
             return HTTPFound(
-                request.route_url('list'),
+                request.route_url('home'),
                 headers=auth_head,
             )
     # --- user ---
@@ -145,7 +145,7 @@ def login_view(request):
         user = request.dbsession.query(User).filter_by(
             username=request.authenticated_userid).first()
         return HTTPFound(
-            request.route_url('list'),
+            request.route_url('home'),
             headers=auth_head,
         )
     else:
@@ -164,7 +164,7 @@ def login_view(request):
 def logout_view(request):
     """Logout view."""
     empty_head = forget(request)
-    return HTTPFound(request.route_url('list'), headers=empty_head)
+    return HTTPFound(request.route_url('home'), headers=empty_head)
 
 
 # ...
@@ -271,7 +271,7 @@ def create_view(request):
             content=request.POST['content']
         )
         request.dbsession.add(jentry)
-        return HTTPFound(request.route_url('list'))
+        return HTTPFound(request.route_url('home'))
     try:
         journal = request.dbsession.query(
             Jentry).order_by(
@@ -362,7 +362,7 @@ def delete_forever_view(request):
     jentry = request.dbsession.query(Jentry).get(jentry_id)
     if user.username == jentry.author_username:
         request.dbsession.delete(jentry)
-        return HTTPFound(request.route_url('list'))
+        return HTTPFound(request.route_url('home'))
     else:
         return HTTPForbidden
     return {"user": user}
@@ -452,7 +452,7 @@ def delete_user_forever_view(request):
         return HTTPFound(request.route_url('users'))
     elif user_to_delete.username == request.authenticated_userid:
         empty_head = forget(request)
-        return HTTPFound(request.route_url('list'), headers=empty_head)
+        return HTTPFound(request.route_url('home'), headers=empty_head)
 
 
 db_err_msg = """\
