@@ -4,7 +4,8 @@
 
 def includeme(config):
     """Include me."""
-    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_static_view(
+        'static', 'learning_journal:static', cache_max_age=3600)
     # ------- PUBLIC ----------------------------------------------------------
     config.add_route('home', '/')
     config.add_route('detail', '/journal/{id:\d+}')
