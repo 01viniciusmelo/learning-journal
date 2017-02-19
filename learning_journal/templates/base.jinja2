@@ -92,24 +92,24 @@
       <a
         href="{{ request.route_url('home') }}" 
         class="brand"
-        >Learning Journal</a>
+        > Learning Journal </a>
 
       {% if request.authenticated_userid %}
         <a
           href="{{ request.route_url('create') }}"
           class="brand"
-          >New Entry</a>
+          > New Entry </a>
 
         <a 
           href="{{ request.route_url('logout') }}" 
           class="brand"
-          >Logout</a>
+          > Logout </a>
 
       {% else %}
         <a 
           href="{{ request.route_url('login') }}"
           class="brand"
-          >Login</a>
+          > Login </a>
       {% endif %}
 
       {% if user %}
@@ -117,7 +117,7 @@
         <a
           href="{{ request.route_url('users') }}"
           class="brand"
-          >Admin: Users</a>
+          > Admin: Users </a>
         {% endif %}
       {% endif %}
 
