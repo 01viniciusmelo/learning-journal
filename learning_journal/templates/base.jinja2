@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>
+      {% block title %}{% endblock %} - My Learning Journal
+  </title>
+  <meta name="description"
+        content="Ben Petty's personal learning journal."
+        >
+  <meta name="author"
+        content="Benjamin S. Petty"
+        >
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1"
+        >
+
+<!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="/static/dist/js/jquery.js"></script>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="/static/bootstrap/css/bootstrap.css"
+        rel="stylesheet"
+        >
+  <link href="/static/bootstrap/css/bootstrap-responsive.css"
+        rel="stylesheet"
+        >
+  <link href="/static/bootstrap/css/custom.css"
+        rel="stylesheet"
+        >
+  <link href="/static/dist/css/docs.css"
+        rel="stylesheet"
+        >
+  <link href="static/dist/js/google-code-prettify/prettify.css"
+        rel="stylesheet"
+        >
+    
+  <script> var _386 = { onePass: true, speedFactor: 3.25 };</script>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+{# ------- NAV ------ #}
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+
+      <a  href="{{ request.route_url('home') }}" 
+          class="brand"
+          >Learning Journal</a>
+
+      {% if request.authenticated_userid %}
+        <a  href="{{ request.route_url('create') }}"
+            class="brand"
+            >New Entry</a>
+
+        <a  href="{{ request.route_url('logout') }}" 
+            class="brand"
+            >Logout</a>
+
+      {% else %}
+        <a  href="{{ request.route_url('login') }}"
+            class="brand"
+            >Login</a>
+      {% endif %}
+
+      {% if user %}
+        {% if user.admin %}
+        <a  href="{{ request.route_url('users') }}"
+            class="brand"
+            >Admin: Users</a>
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </nav>
+
+  <div class="container logged-in">
+    {% if request.authenticated_userid %}
+      <br /> &#62; Logged in as 
+      <a  href="{{ request.route_url('profile', username=request.authenticated_userid) }}"
+          >{{ request.authenticated_userid }}</a>
+    {% endif %}
+  </div>
+
+{# ------ BODY ----- #}
+  <div id="main" class="container centered">
+    <div class="row">
+      <div class="col-lg-12">
+
+        {% block body %}{% endblock %}
+
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+    {% block footer %}
+    &copy; Copyright 2016 <a href="http://benpetty.me" target="_blank">Benjamin S. Petty</a>.
+    {% endblock %}
+  </footer>
+
+<!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script>
+    $(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+        });
+    });
+    </script>
+    <script src="/static/dist/js/bootstrap-386.js"></script>
+    <script src="/static/dist/js/bootstrap-transition.js"></script>
+    <script src="/static/dist/js/bootstrap-alert.js"></script>
+    <script src="/static/dist/js/bootstrap-modal.js"></script>
+    <script src="/static/dist/js/bootstrap-dropdown.js"></script>
+    <script src="/static/dist/js/bootstrap-scrollspy.js"></script>
+    <script src="/static/dist/js/bootstrap-tab.js"></script>
+    <script src="/static/dist/js/bootstrap-tooltip.js"></script>
+    <script src="/static/dist/js/bootstrap-popover.js"></script>
+    <script src="/static/dist/js/bootstrap-button.js"></script>
+    <script src="/static/dist/js/bootstrap-collapse.js"></script>
+    <script src="/static/dist/js/bootstrap-carousel.js"></script>
+    <script src="/static/dist/js/bootstrap-typeahead.js"></script>
+    <script src="/static/dist/js/bootstrap-affix.js"></script>
+    <script src="/static/dist/js/holder/holder.js"></script>
+    <script src="/static/dist/js/google-code-prettify/prettify.js"></script>
+    <script src="/static/dist/js/application.js"></script>
+
+</body>
+</html>
