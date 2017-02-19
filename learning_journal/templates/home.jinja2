@@ -4,12 +4,12 @@
 {% block body %}
 <h1>My Learning Journal</h1>
 <p>My personal learning journal.</p>
-<table class="table table-hover">
+<table class="table table-hover table-responsive">
   <thead>
     <tr>
       <th>Title</th>
       <th>Date/Time</th>
-      <th>Category</th>
+      <th class="hide_mobile">Category</th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +21,7 @@
           </a>
         </td>
         <td>{{ jentry.created.strftime('%A %b %d, %Y') }}</td>
-        <td>{{ jentry.category }}</td>
+        <td class="hide_mobile">{{ jentry.category }}</td>
       </tr>
     {% endfor %}
   </tbody>
