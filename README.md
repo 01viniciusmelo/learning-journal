@@ -25,14 +25,14 @@ This repo contains the source code for my personal learning journal—a blog app
 To get started with your own version of this application:
 ```bash
 # 1. Clone this repo.
-# 2. Initialize/activate your virtual environment.
+# 2. Initialize/activate your virtual environment with variable declarations.
 # 3. Install all the required packages, including testing:
 $ pip install -e .[testing]
-# 4. Create your database with Postgres
+# 4. Create your database with Postgres:
 $ createdb learning_journal
-# 5. Erase any existing entries and initialize a new database for your local environment:
+# 5. Erase any existing entries and initializes a new database for your local environment:
 $ initialize_db development.ini
-# 6. Serve the page locally.
+# 6. Serve the page locally:
 $ pserve development.ini --reload
 ```
 
