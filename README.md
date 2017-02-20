@@ -8,18 +8,18 @@ This repo contains the source code for my personal learning journal—a blog app
 
 ## Application dependencies:
 
-- 'pyramid'
-- 'pyramid_jinja2'
-- 'pyramid_debugtoolbar'
-- 'pyramid_tm'
-- 'SQLAlchemy'
-- 'transaction'
-- 'zope.sqlalchemy'
-- 'waitress'
-- 'markdown'
-- 'bleach'
-- 'psycopg2'
-- 'passlib'
+- `pyramid`
+- `pyramid_jinja2`
+- `pyramid_debugtoolbar`
+- `pyramid_tm`
+- `SQLAlchemy`
+- `transaction`
+- `zope.sqlalchemy`
+- `waitress`
+- `markdown`
+- `bleach`
+- `psycopg2`
+- `passlib`
 
 ## Development
 
