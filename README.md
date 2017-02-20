@@ -28,9 +28,11 @@ To get started with your own version of this application:
 # 2. Initialize/activate your virtual environment.
 # 3. Install all the required packages, including testing:
 $ pip install -e .[testing]
-# 4. Erase any existing entries and initialize a new database for your local environment:
+# 4. Create your database with Postgres
+$ createdb learning_journal
+# 5. Erase any existing entries and initialize a new database for your local environment:
 $ initialize_db development.ini
-# 5. Serve the page locally.
+# 6. Serve the page locally.
 $ pserve development.ini --reload
 ```
 
