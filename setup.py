@@ -29,12 +29,12 @@ requires = [
 ]
 
 tests_require = [
-    'WebTest >= 1.3.1',
     'pytest',
     'pytest-cov',
     'tox',
     'faker',
     'coveralls',
+    'WebTest',
 ]
 
 setup(name='learning_journal',

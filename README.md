@@ -10,7 +10,6 @@ This repo contains the source code for my personal learning journal—a blog app
 
 - `pyramid`
 - `pyramid_jinja2`
-- `pyramid_debugtoolbar`
 - `pyramid_tm`
 - `SQLAlchemy`
 - `transaction`
@@ -62,7 +61,7 @@ python runapp.py
   - `created` (DateTime object)
   - `modfied` (DateTime object)
   - `category`
-- **User** - Application user models. Properties include:
+- **User** - Application user model. Properties include:
   - `id` (primary key)
   - `username`
   - hashed `password`
@@ -75,7 +74,7 @@ python runapp.py
 
 ## Environment Variables
 
-Declare the environment variables `DATABASE_URL` and `AUTH_SECRET`. For example add something like this to your `bin/activate` file:
+Declare the environment variables `DATABASE_URL` and `AUTH_SECRET`. For example add something like this to your `bin/activate` file for development environment:
 
 ```
 export DATABASE_URL="postgres://username@localhost:5432/learning_journal"
@@ -86,10 +85,11 @@ export AUTH_SECRET="potato"
 
 ### Testing Dependencies
 
-- Pytest
-- Coverage
-- Tox
-
+- `pytest`
+- `pytest-cov`
+- `tox`
+- `faker`
+- `WebTest`
 
 ## Credits
 
