@@ -23,7 +23,7 @@ script:
 # safelist
 branches:
   only:
-  - security
+  - master
 
 after_success:
   - coveralls
