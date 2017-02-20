@@ -34,7 +34,10 @@
 
     {% for user in users %}
       {% if not user.admin and user.author %}
-        <tr>
+        <tr
+          class="clickable-row"
+          data-href="{{ request.route_url('profile', username=user.username) }}"
+          >
           <td>
             <a href="{{ request.route_url('profile', username=user.username) }}">
               {{ user.username }}
@@ -49,7 +52,10 @@
 
     {% for user in users %}
       {% if not user.admin and not user.author %}
-        <tr>
+        <tr
+          class="clickable-row"
+          data-href="{{ request.route_url('profile', username=user.username) }}"
+          >
           <td>
             <a href="{{ request.route_url('profile', username=user.username) }}">
               {{ user.username }}
