@@ -3,49 +3,50 @@
 
 {% block body %}
 
-<div class="container">
+  <div class="container">
 
-  <form class="form-signin" method="POST">
-  <h2 class="form-signing-heading">Login</h2>
-  <input 
-    type="hidden"
-    name="csrf_token"
-    value="{{ request.session.get_csrf_token() }}" 
-    />
+    <form class="form-signin" method="POST">
+      <h2 class="form-signing-heading">Login</h2>
 
-    <label for="username">Username</label>
-    <input 
-      type="text"
-      name="username"
-      class="input-block-level"
-      placeholder="Username"
-      />
+      <input 
+        type="hidden"
+        name="csrf_token"
+        value="{{ request.session.get_csrf_token() }}" 
+        />
 
-  <label for="password">Password</label>
-  <input 
-    type="password"
-    name="password"
-    class="input-block-level"
-    placeholder="Password"
-    />
+      <label for="username">Username</label>
+      <input 
+        type="text"
+        name="username"
+        class="input-block-level"
+        placeholder="Username"
+        />
 
-  <div class="text-center">
-    <button 
-      type="submit"
-      class="btn btn-large btn-primary"
-      value="Log In"
-      />Log In
-    </button>
+      <label for="password">Password</label>
+      <input 
+        type="password"
+        name="password"
+        class="input-block-level"
+        placeholder="Password"
+        />
 
-    <a href="{{ request.route_url('register') }}"
-      ><button
-        class="btn btn-large btn-primary"
-        type="button"
-        />Register</button
-      ></a>
+      <div class="text-center">
+        <button 
+          type="submit"
+          class="btn btn-large btn-primary"
+          value="Log In"
+          />Log In
+        </button>
+
+        <a href="{{ request.route_url('register') }}"
+          ><button
+            class="btn btn-large btn-primary"
+            type="button"
+            />Register</button
+          ></a>
+      </div>
+
+    </form>
   </div>
 
-  </form>
-
-</div>
 {% endblock %}

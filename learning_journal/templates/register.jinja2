@@ -2,68 +2,76 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-<h1>Register</h1>
 
-<form class="form-signin" method='POST'>
-  <input
-    type="hidden"
-    name="csrf_token"
-    value="{{ request.session.get_csrf_token() }}"
-    >
+  <div class="container">
 
-  <label>Username: </label>
-  <input
-    type="text"
-    name="username"
-    class="input-block-level"
-    required
-    />
+    <form class="form-signin" method="POST">
+      <h2 class="form-signing-heading">Register</h2>
 
-  <label>Password: </label>
-  <input
-    type="password"
-    name="password"
-    class="input-block-level"
-    required
-    />
+      <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ request.session.get_csrf_token() }}"
+        />
 
-  <label>First Name: </label>
-  <input
-    type="text"
-    name="firstname"
-    class="input-block-level"
-    required
-    />
+      <label for="username">Username: </label>
+      <input
+        type="text"
+        name="username"
+        class="input-block-level"
+        required
+        />
 
-  <label>Last Name: </label>
-  <input
-    type="text"
-    name="lastname"
-    class="input-block-level"
-    required
-    />
+      <label for="password">Password: </label>
+      <input
+        type="password"
+        name="password"
+        class="input-block-level"
+        required
+        />
 
-  <label>Email</label>
-  <input
-    type="email"
-    name="email"
-    class="input-block-level"
-    required
-    />
+      <label for="firstname">First Name: </label>
+      <input
+        type="text"
+        name="firstname"
+        class="input-block-level"
+        required
+        />
 
-  <label>Bio</label>
-  <textarea
-    name="bio"
-    placeholder="Bio..."
-    rows="5"
-    class="input-block-level"
-    required
-    /></textarea>
-  <br />
-  <input
-    type="submit"
-    class="btn btn-large btn-primary"
-    value="< Create Account >"
-    />
-</form>
+      <label for="lastname">Last Name: </label>
+      <input
+        type="text"
+        name="lastname"
+        class="input-block-level"
+        required
+        />
+
+      <label for="email">Email</label>
+      <input
+        type="email"
+        name="email"
+        class="input-block-level"
+        required
+        />
+
+      <label for="bio">Bio</label>
+      <textarea
+        name="bio"
+        placeholder="Bio..."
+        rows="5"
+        class="input-block-level"
+        required
+        /></textarea>
+
+      <div class="text-center">
+        <input
+          type="submit"
+          class="btn btn-large btn-primary"
+          value="< Create Account >"
+          />
+      </div>
+
+    </form>
+  </div>
+
 {% endblock %}
