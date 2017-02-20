@@ -157,19 +157,19 @@ def test_new_jentry_is_added(
     assert len(query) == len(JENTRYS)
 
 
-def test_list_view_returns_empty_when_empty(
+def test_home_view_returns_empty_when_empty(
         dummy_request):
     """Test that the list view returns no objects when none added."""
-    from .views.default import list_view
-    result = list_view(dummy_request)
+    from .views.default import home_view
+    result = home_view(dummy_request)
     assert len(result["journal"]) == 0
 
 
-def test_list_view_returns_objects_when_exist(
+def test_home_view_returns_objects_when_exist(
         dummy_request, add_models):
     """Test that the list view does return objects when the DB is populated."""
-    from .views.default import list_view
-    result = list_view(dummy_request)
+    from .views.default import home_view
+    result = home_view(dummy_request)
     assert len(result["journal"]) == 100
 
 
