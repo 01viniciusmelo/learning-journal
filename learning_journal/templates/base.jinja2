@@ -95,10 +95,12 @@
         > Learning Journal </a>
 
       {% if request.authenticated_userid %}
-        <a
-          href="{{ request.route_url('create') }}"
-          class="brand"
-          > New Entry </a>
+        {% if user.author %}
+          <a
+            href="{{ request.route_url('create') }}"
+            class="brand"
+            > New Entry </a>
+        {% endif %}
 
         <a 
           href="{{ request.route_url('logout') }}" 

@@ -24,7 +24,6 @@ from passlib.apps import custom_app_context as pwd_context
 @view_config(
     route_name="home",
     renderer="../templates/home.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def home_view(request):
     """List all existing journal entries on the home page."""
@@ -50,7 +49,6 @@ def home_view(request):
 @view_config(
     route_name="detail",
     renderer="../templates/detail.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def detail_view(request):
     """Expand an individual entry."""
@@ -84,7 +82,6 @@ def detail_view(request):
 @view_config(
     route_name="profile",
     renderer="../templates/profile.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def profile_view(request):
     """View or edit your user profile."""
@@ -126,7 +123,6 @@ def profile_view(request):
 @view_config(
     route_name="login",
     renderer="../templates/login.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def login_view(request):
     """Login view."""
@@ -159,7 +155,6 @@ def login_view(request):
 
 @view_config(
     route_name="logout",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def logout_view(request):
     """Logout view."""
@@ -173,7 +168,6 @@ def logout_view(request):
 @view_config(
     route_name="register",
     renderer="../templates/register.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def register_view(request):
     """Registration view."""
