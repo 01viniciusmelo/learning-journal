@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/benpetty/Learning-Journal.svg?branch=security)](https://travis-ci.org/benpetty/Learning-Journal) [![Coverage Status](https://coveralls.io/repos/github/benpetty/Learning-Journal/badge.svg?branch=security)](https://coveralls.io/github/benpetty/Learning-Journal?branch=security)
+[![Build Status](https://travis-ci.org/benpetty/django-imager.svg?branch=master)](https://travis-ci.org/benpetty/django-imager) [![Coverage Status](https://coveralls.io/repos/github/benpetty/Learning-Journal/badge.svg?branch=master)](https://coveralls.io/github/benpetty/Learning-Journal?branch=master)
 
 # **Pyramid Learning Journal Project**
 
