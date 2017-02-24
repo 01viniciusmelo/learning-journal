@@ -11,8 +11,6 @@ from pyramid.httpexceptions import HTTPFound, HTTPForbidden
 from pyramid.security import remember, forget
 from pyramid.response import Response
 
-from sqlalchemy.exc import DBAPIError
-
 from learning_journal.models import Jentry, User
 from learning_journal.security import check_credentials
 
@@ -27,10 +25,7 @@ from passlib.apps import custom_app_context as pwd_context
 )
 def home_view(request):
     """List all existing journal entries on the home page."""
-    try:
-        journal = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
-    except DBAPIError:
-        return Response(db_err_msg, content_type='text/plain', status=500)
+    journal = request.dbsession.query(Jentry).order_by(Jentry.id.desc())
 
     # --- user ---
     if request.authenticated_userid:
@@ -162,48 +157,6 @@ def logout_view(request):
     return HTTPFound(request.route_url('home'), headers=empty_head)
 
 
-# ...
-
-
-# @view_config(
-#     route_name="register",
-#     renderer="../templates/register.jinja2",
-# )
-# def register_view(request):
-#     """Registration view."""
-#     if request.method == "POST" and request.POST:
-#         if request.POST["username"] and len(
-#                 request.POST["username"].split()) > 1:
-#             new_name = request.POST["username"].split()
-#             new_name = str.lower('_'.join(new_name))
-#         else:
-#             new_name = request.POST["username"]
-#             new_name = str.lower(str(new_name))
-#         new_user = User(
-#             username=new_name,
-#             password=pwd_context.hash(request.POST["password"]),
-#             firstname=request.POST["firstname"],
-#             lastname=request.POST["lastname"],
-#             email=request.POST["email"],
-#             bio=request.POST["bio"],
-#             author=False,
-#             admin=False,
-#         )
-#         request.dbsession.add(new_user)
-#         auth_head = remember(request, new_name)
-#         return HTTPFound(request.route_url(
-#             'profile', username=new_name),
-#             headers=auth_head)
-#     # --- user ---
-#     if request.authenticated_userid:
-#         user = request.dbsession.query(User).filter_by(
-#             username=request.authenticated_userid).first()
-#     else:
-#         user = None
-#     # ------------
-#     return {"user": user}
-
-
 # ================ USER VIEWS =================================================
 
 
@@ -269,17 +222,10 @@ def create_view(request):
         )
         request.dbsession.add(jentry)
         return HTTPFound(request.route_url('home'))
-    try:
-        journal = request.dbsession.query(
-            Jentry).order_by(
-                Jentry.id.desc()
-        )
-    except DBAPIError:
-        return Response(
-            db_err_msg,
-            content_type='text/plain',
-            status=500
-        )
+    journal = request.dbsession.query(
+        Jentry).order_by(
+            Jentry.id.desc()
+    )
     return {
         "user": user,
         "journal": journal.all()

@@ -13,7 +13,6 @@ def includeme(config):
     # ------- GET PERMISSION --------------------------------------------------
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
-    # config.add_route('register', '/register')
     # ------- USER VIEWS ------------------------------------------------------
     config.add_route('delete_user', '/delete_user/{username:[\d\w]+}')
     # ------- AUTHOR VIEWS ----------------------------------------------------
