@@ -8,7 +8,7 @@ from jinja2 import Markup
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound, HTTPForbidden
-from pyramid.security import remember, forget, NO_PERMISSION_REQUIRED
+from pyramid.security import remember, forget
 from pyramid.response import Response
 
 from sqlalchemy.exc import DBAPIError
@@ -24,7 +24,6 @@ from passlib.apps import custom_app_context as pwd_context
 @view_config(
     route_name="home",
     renderer="../templates/home.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def home_view(request):
     """List all existing journal entries on the home page."""
@@ -50,7 +49,6 @@ def home_view(request):
 @view_config(
     route_name="detail",
     renderer="../templates/detail.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def detail_view(request):
     """Expand an individual entry."""
@@ -84,7 +82,6 @@ def detail_view(request):
 @view_config(
     route_name="profile",
     renderer="../templates/profile.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def profile_view(request):
     """View or edit your user profile."""
@@ -126,7 +123,6 @@ def profile_view(request):
 @view_config(
     route_name="login",
     renderer="../templates/login.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def login_view(request):
     """Login view."""
@@ -159,7 +155,6 @@ def login_view(request):
 
 @view_config(
     route_name="logout",
-    permission=NO_PERMISSION_REQUIRED,
 )
 def logout_view(request):
     """Logout view."""
@@ -170,44 +165,43 @@ def logout_view(request):
 # ...
 
 
-@view_config(
-    route_name="register",
-    renderer="../templates/register.jinja2",
-    permission=NO_PERMISSION_REQUIRED,
-)
-def register_view(request):
-    """Registration view."""
-    if request.method == "POST" and request.POST:
-        if request.POST["username"] and len(
-                request.POST["username"].split()) > 1:
-            new_name = request.POST["username"].split()
-            new_name = str.lower('_'.join(new_name))
-        else:
-            new_name = request.POST["username"]
-            new_name = str.lower(str(new_name))
-        new_user = User(
-            username=new_name,
-            password=pwd_context.hash(request.POST["password"]),
-            firstname=request.POST["firstname"],
-            lastname=request.POST["lastname"],
-            email=request.POST["email"],
-            bio=request.POST["bio"],
-            author=False,
-            admin=False,
-        )
-        request.dbsession.add(new_user)
-        auth_head = remember(request, new_name)
-        return HTTPFound(request.route_url(
-            'profile', username=new_name),
-            headers=auth_head)
-    # --- user ---
-    if request.authenticated_userid:
-        user = request.dbsession.query(User).filter_by(
-            username=request.authenticated_userid).first()
-    else:
-        user = None
-    # ------------
-    return {"user": user}
+# @view_config(
+#     route_name="register",
+#     renderer="../templates/register.jinja2",
+# )
+# def register_view(request):
+#     """Registration view."""
+#     if request.method == "POST" and request.POST:
+#         if request.POST["username"] and len(
+#                 request.POST["username"].split()) > 1:
+#             new_name = request.POST["username"].split()
+#             new_name = str.lower('_'.join(new_name))
+#         else:
+#             new_name = request.POST["username"]
+#             new_name = str.lower(str(new_name))
+#         new_user = User(
+#             username=new_name,
+#             password=pwd_context.hash(request.POST["password"]),
+#             firstname=request.POST["firstname"],
+#             lastname=request.POST["lastname"],
+#             email=request.POST["email"],
+#             bio=request.POST["bio"],
+#             author=False,
+#             admin=False,
+#         )
+#         request.dbsession.add(new_user)
+#         auth_head = remember(request, new_name)
+#         return HTTPFound(request.route_url(
+#             'profile', username=new_name),
+#             headers=auth_head)
+#     # --- user ---
+#     if request.authenticated_userid:
+#         user = request.dbsession.query(User).filter_by(
+#             username=request.authenticated_userid).first()
+#     else:
+#         user = None
+#     # ------------
+#     return {"user": user}
 
 
 # ================ USER VIEWS =================================================
@@ -232,12 +226,15 @@ def delete_user_view(request):
     delete_username = request.matchdict["username"]
     user_to_delete = request.dbsession.query(
         User).filter_by(username=delete_username).first()
-    if user.admin or user == user_to_delete:
-        return {
-            "delete_user": user_to_delete,
-            "user": user,
-        }
-    else:
+    try:
+        if user.admin or user == user_to_delete:
+            return {
+                "delete_user": user_to_delete,
+                "user": user,
+            }
+        else:
+            return HTTPForbidden
+    except AttributeError:
         return HTTPForbidden
 
 
@@ -247,7 +244,7 @@ def delete_user_view(request):
 @view_config(
     route_name="create",
     renderer="../templates/create.jinja2",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def create_view(request):
@@ -292,7 +289,7 @@ def create_view(request):
 @view_config(
     route_name="update",
     renderer="../templates/update.jinja2",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def update_view(request):
@@ -322,7 +319,7 @@ def update_view(request):
 @view_config(
     route_name="delete",
     renderer="../templates/delete.jinja2",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def delete_view(request):
@@ -345,7 +342,7 @@ def delete_view(request):
 
 @view_config(
     route_name="delete_forever",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def delete_forever_view(request):

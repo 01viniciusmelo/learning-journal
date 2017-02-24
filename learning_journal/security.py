@@ -21,7 +21,6 @@ class MyRoot(object):
 
     __acl__ = [
         (Allow, Everyone, 'view'),
-        (Allow, Authenticated, 'author'),
         (Allow, Authenticated, 'admin'),
     ]
 

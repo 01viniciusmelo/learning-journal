@@ -95,10 +95,12 @@
         > Learning Journal </a>
 
       {% if request.authenticated_userid %}
-        <a
-          href="{{ request.route_url('create') }}"
-          class="brand"
-          > New Entry </a>
+        {% if user.author %}
+          <a
+            href="{{ request.route_url('create') }}"
+            class="brand"
+            > New Entry </a>
+        {% endif %}
 
         <a 
           href="{{ request.route_url('logout') }}" 
@@ -145,7 +147,7 @@
 
   <footer id="footer">
     {% block footer %}
-    &copy; Copyright 2016 <a href="http://benpetty.me" target="_blank">Benjamin S. Petty</a>.
+    &copy; Copyright 2017 <a href="http://benpetty.me" target="_blank">Benjamin S. Petty</a>.
     {% endblock %}
   </footer>
 
