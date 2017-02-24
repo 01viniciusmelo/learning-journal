@@ -244,7 +244,7 @@ def delete_user_view(request):
 @view_config(
     route_name="create",
     renderer="../templates/create.jinja2",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def create_view(request):
@@ -289,7 +289,7 @@ def create_view(request):
 @view_config(
     route_name="update",
     renderer="../templates/update.jinja2",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def update_view(request):
@@ -319,7 +319,7 @@ def update_view(request):
 @view_config(
     route_name="delete",
     renderer="../templates/delete.jinja2",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def delete_view(request):
@@ -342,7 +342,7 @@ def delete_view(request):
 
 @view_config(
     route_name="delete_forever",
-    permission="author",
+    permission="admin",
     require_csrf=True,
 )
 def delete_forever_view(request):
