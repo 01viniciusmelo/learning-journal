@@ -241,26 +241,26 @@ def test_logout_view_redirects(testapp):
     assert response.status_code == 302
 
 
-def test_register_view_ok(testapp):
-    """Register view should be ok."""
-    response = testapp.get('/register')
-    assert response.status_code == 200
+# def test_register_view_ok(testapp):
+#     """Register view should be ok."""
+#     response = testapp.get('/register')
+#     assert response.status_code == 200
 
 
-def test_register_new_user(testapp):
-    """Registration page should create a new user in the database."""
-    user = {
-        'username': 'bobbydobalina',
-        'password': 'password',
-        'firstname': 'bob',
-        'lastname': 'dobalina',
-        'email': 'email@address.com',
-        'bio': 'bio',
+# def test_register_new_user(testapp):
+#     """Registration page should create a new user in the database."""
+#     user = {
+#         'username': 'bobbydobalina',
+#         'password': 'password',
+#         'firstname': 'bob',
+#         'lastname': 'dobalina',
+#         'email': 'email@address.com',
+#         'bio': 'bio',
 
-    }
-    html = testapp.post('/register', user, status=302).follow().html
-    assert 'email@address.com' in html.find_all('li')[2].text
-    assert 'bob dobalina' in html.find_all('li')[1].text
+#     }
+#     html = testapp.post('/register', user, status=302).follow().html
+#     assert 'email@address.com' in html.find_all('li')[2].text
+#     assert 'bob dobalina' in html.find_all('li')[1].text
 
 
 def test_successful_login_leads_somewhere(testapp, fill_the_db):
