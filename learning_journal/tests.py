@@ -1,7 +1,6 @@
 """Tests for the Learning Journal application."""
 # -*- coding: utf-8 -*-
 
-import unittest
 import pytest
 from pyramid import testing
 
