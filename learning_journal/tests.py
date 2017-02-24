@@ -1,6 +1,7 @@
 """Tests for the Learning Journal application."""
 # -*- coding: utf-8 -*-
 
+import unittest
 import pytest
 from pyramid import testing
 
@@ -55,7 +56,7 @@ USERS = [
         password=pwd_context.hash('password'),
         firstname='bob',
         lastname='dobalina',
-        email='admin@imager.com',
+        email='admin@gmail.com',
         author=True,
         admin=True,
         bio='I am an admin.',
@@ -65,7 +66,7 @@ USERS = [
         password=pwd_context.hash('authorpassword'),
         firstname='bob',
         lastname='dobalina',
-        email='author@imager.com',
+        email='author@gmail.com',
         author=True,
         admin=False,
         bio='I am an author.',
@@ -75,7 +76,7 @@ USERS = [
         password=pwd_context.hash('userpassword'),
         firstname='bob',
         lastname='dobalina',
-        email='user@imager.com',
+        email='user@gmail.com',
         author=False,
         admin=False,
         bio='I am but a meer user.',
@@ -145,9 +146,8 @@ def add_models(dummy_request):
     Every test that includes this fixture will add new random jentrys.
     """
     dummy_request.dbsession.add_all(JENTRYS)
+    dummy_request.dbsession.add_all(USERS)
 
-
-# ======================= UNIT TESTS ======================================== #
 
 def test_new_jentry_is_added(
         db_session):
@@ -182,11 +182,6 @@ def test_detail_view_contains_individual_expense_details(
     result = detail_view(dummy_request)
     assert result["jentry"] == jentry
 
-
-# ============================== FUNCTIONAL TESTS =========================== #
-
-
-# ---- setup ---------------------------------------------------------------- #
 
 @pytest.fixture
 def testapp():
@@ -229,11 +224,27 @@ def fill_the_db(testapp):
     return dbsession
 
 
-# ------------- TESTS ------------------------------------------------------- #
-
 def test_home_page_pops_up(testapp):
     """Test that home page get sent correctly."""
-    response = testapp.get('/', status=200)
+    response = testapp.get('/')
+    assert response.status_code == 200
+
+
+def test_login_view_ok(testapp):
+    """Test login view."""
+    response = testapp.get('/login')
+    assert response.status_code == 200
+
+
+def test_logout_view_redirects(testapp):
+    """Logout view should redirect."""
+    response = testapp.get('/logout')
+    assert response.status_code == 302
+
+
+def test_register_view_ok(testapp):
+    """Register view should be ok."""
+    response = testapp.get('/register')
     assert response.status_code == 200
 
 
@@ -253,8 +264,6 @@ def test_register_new_user(testapp):
     assert 'bob dobalina' in html.find_all('li')[1].text
 
 
-# ------------- TESTS WITH FILLED DATABASE ---------------------------------- #
-
 def test_successful_login_leads_somewhere(testapp, fill_the_db):
     """Test that after logging in it sends you somewhere."""
     response = testapp.post(
@@ -264,3 +273,20 @@ def test_successful_login_leads_somewhere(testapp, fill_the_db):
             'password': 'password'}
     )
     assert response.status_code == 200
+
+
+def test_successful_login_shows_table(testapp, fill_the_db):
+    """Test that after logging in you see a table of data."""
+    response = testapp.get('/login')
+    assert response.status_code == 200
+    assert response.html.find('form')
+
+
+def test_logout(testapp, fill_the_db):
+    """Test that after logging out a login link exists."""
+    testapp.post('/login',
+                 params={'username': 'admin',
+                         'password': 'password'})
+    response = testapp.get('/logout', status=302).follow()
+    assert response.status_code == 200
+    assert response.html.find_all('a')[1].text == ' Login '

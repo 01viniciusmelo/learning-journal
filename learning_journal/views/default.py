@@ -8,7 +8,7 @@ from jinja2 import Markup
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound, HTTPForbidden
-from pyramid.security import remember, forget, NO_PERMISSION_REQUIRED
+from pyramid.security import remember, forget
 from pyramid.response import Response
 
 from sqlalchemy.exc import DBAPIError
@@ -226,12 +226,15 @@ def delete_user_view(request):
     delete_username = request.matchdict["username"]
     user_to_delete = request.dbsession.query(
         User).filter_by(username=delete_username).first()
-    if user.admin or user == user_to_delete:
-        return {
-            "delete_user": user_to_delete,
-            "user": user,
-        }
-    else:
+    try:
+        if user.admin or user == user_to_delete:
+            return {
+                "delete_user": user_to_delete,
+                "user": user,
+            }
+        else:
+            return HTTPForbidden
+    except AttributeError:
         return HTTPForbidden
 
 
